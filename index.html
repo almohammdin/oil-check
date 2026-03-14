@@ -4,280 +4,380 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0a0e1a">
 <title>منصة التحليل الذكي لزيوت المحركات</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:     #0a0e1a;
-    --bg2:    #111827;
-    --bg3:    #1a2235;
-    --card:   #141d2e;
-    --border: rgba(255,255,255,0.08);
-    --accent: #f59e0b;
-    --acc2:   #10b981;
-    --acc3:   #3b82f6;
-    --danger: #ef4444;
-    --text:   #f1f5f9;
-    --text2:  #94a3b8;
-    --text3:  #64748b;
-    --r:      16px;
-    --font:   'IBM Plex Sans Arabic', system-ui, sans-serif;
-  }
-  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-  html { -webkit-text-size-adjust:100%; }
-  body {
-    font-family: var(--font);
-    font-size: 17px; line-height: 1.75;
-    background: var(--bg); color: var(--text);
-    min-height: 100vh; direction: rtl; overflow-x: hidden;
-  }
-  ::-webkit-scrollbar { width:4px; height:4px; }
-  ::-webkit-scrollbar-thumb { background:rgba(255,255,255,.12); border-radius:4px; }
+/* ══ TOKENS ══════════════════════════════════════ */
+:root{
+  --bg:#0a0e1a; --bg2:#111827; --bg3:#1a2235; --card:#141d2e;
+  --border:rgba(255,255,255,.08);
+  --accent:#f59e0b; --acc2:#10b981; --acc3:#3b82f6; --danger:#ef4444;
+  --text:#f1f5f9; --text2:#94a3b8; --text3:#64748b;
+  --r:16px;
+  --font:'IBM Plex Sans Arabic',system-ui,sans-serif;
+  /* safe area insets */
+  --safe-t:env(safe-area-inset-top,0px);
+  --safe-b:env(safe-area-inset-bottom,0px);
+  --safe-l:env(safe-area-inset-left,0px);
+  --safe-r:env(safe-area-inset-right,0px);
+}
 
-  /* HEADER */
-  header {
-    position:sticky; top:0; z-index:100;
-    background:rgba(10,14,26,.93);
-    border-bottom:1px solid var(--border);
-    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
-    padding:14px 20px;
-    display:flex; align-items:center; gap:12px;
-  }
-  .logo-icon {
-    width:40px; height:40px; flex-shrink:0;
-    background:linear-gradient(135deg,var(--accent),#d97706);
-    border-radius:11px;
-    display:flex; align-items:center; justify-content:center;
-    font-size:18px;
-  }
-  .logo-text h1 { font-size:15px; font-weight:700; line-height:1.2; }
-  .logo-text p  { font-size:12px; color:var(--text3); margin-top:2px; }
+/* ══ RESET ═══════════════════════════════════════ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
+body{
+  font-family:var(--font);
+  font-size:17px; line-height:1.75;
+  background:var(--bg); color:var(--text);
+  min-height:100vh; direction:rtl;
+  overflow-x:hidden;
+  /* bottom padding for iPhone home bar */
+  padding-bottom:calc(12px + var(--safe-b));
+}
+::-webkit-scrollbar{width:3px;height:3px;}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:4px;}
 
-  /* TABS */
-  .tabs {
-    display:flex; gap:2px;
-    padding:16px 16px 0;
-    border-bottom:1px solid var(--border);
-    overflow-x:auto; -webkit-overflow-scrolling:touch;
-    scrollbar-width:none;
-  }
-  .tabs::-webkit-scrollbar { display:none; }
-  .tab {
-    padding:10px 16px;
-    border-radius:10px 10px 0 0;
-    border:1px solid transparent; border-bottom:none;
-    font-family:var(--font); font-size:14px; font-weight:600;
-    cursor:pointer; background:transparent; color:var(--text3);
-    white-space:nowrap; transition:all .18s;
-    -webkit-tap-highlight-color:transparent;
-  }
-  .tab:hover  { color:var(--text2); background:rgba(255,255,255,.03); }
-  .tab.active { background:var(--card); color:var(--accent); border-color:var(--border); }
+/* ══ HEADER ══════════════════════════════════════ */
+header{
+  position:sticky; top:0; z-index:200;
+  background:rgba(10,14,26,.95);
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  padding:12px 20px;
+  padding-top:calc(12px + var(--safe-t));
+  display:flex; align-items:center; gap:12px;
+}
+.logo-icon{
+  width:42px; height:42px; flex-shrink:0;
+  background:linear-gradient(135deg,var(--accent),#d97706);
+  border-radius:12px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px;
+}
+.logo-text h1{font-size:15px; font-weight:700; line-height:1.25;}
+.logo-text p{font-size:12px; color:var(--text3); margin-top:2px;}
 
-  /* PAGES */
-  .page { display:none; padding:24px 16px 40px; max-width:800px; margin:0 auto; }
-  .page.active { display:block; }
+/* ══ TABS ════════════════════════════════════════ */
+.tabs{
+  display:flex; gap:3px;
+  padding:14px 16px 0;
+  border-bottom:1px solid var(--border);
+  overflow-x:auto; -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{
+  flex-shrink:0;
+  padding:11px 16px;
+  border-radius:10px 10px 0 0;
+  border:1px solid transparent; border-bottom:none;
+  font-family:var(--font); font-size:14px; font-weight:600;
+  cursor:pointer; background:transparent; color:var(--text3);
+  white-space:nowrap; transition:all .18s;
+  -webkit-tap-highlight-color:transparent;
+  /* min touch target */
+  min-height:44px;
+}
+.tab:hover{color:var(--text2); background:rgba(255,255,255,.03);}
+.tab.active{background:var(--card); color:var(--accent); border-color:var(--border);}
 
-  /* TYPOGRAPHY */
-  .pg-title { font-size:26px; font-weight:700; margin-bottom:8px; }
-  .pg-sub   { font-size:16px; color:var(--text2); margin-bottom:24px; line-height:1.8; }
+/* ══ PAGES ═══════════════════════════════════════ */
+.page{display:none; padding:20px 16px 48px; max-width:800px; margin:0 auto;}
+.page.active{display:block;}
 
-  /* CARD */
-  .card {
-    background:var(--card); border:1px solid var(--border);
-    border-radius:var(--r); padding:20px; margin-bottom:16px;
-  }
-  .card-label {
-    font-size:15px; font-weight:700; color:var(--text2);
-    margin-bottom:16px; display:flex; align-items:center; gap:7px;
-  }
+/* ══ TYPOGRAPHY ══════════════════════════════════ */
+.pg-title{font-size:24px; font-weight:700; margin-bottom:8px; line-height:1.3;}
+.pg-sub{font-size:15px; color:var(--text2); margin-bottom:22px; line-height:1.8;}
 
-  /* FORM */
-  .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:18px; }
-  @media(max-width:480px){ .form-grid{ grid-template-columns:1fr; } }
-  .field-label { display:block; font-size:15px; font-weight:600; color:var(--text2); margin-bottom:8px; }
-  select, input[type="number"], input[type="email"] {
-    width:100%; background:var(--bg2);
-    border:1px solid var(--border); border-radius:10px;
-    padding:15px 16px;
-    font-family:var(--font); font-size:17px; color:var(--text);
-    outline:none; transition:border-color .2s;
-    direction:rtl; appearance:none; -webkit-appearance:none;
-  }
-  select {
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748b' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-    background-repeat:no-repeat; background-position:left 14px center; padding-left:36px;
-  }
-  select:focus, input:focus { border-color:var(--accent); }
-  select:disabled { opacity:.38; cursor:not-allowed; }
-  select option { background:var(--bg2); }
+/* ══ CARD ════════════════════════════════════════ */
+.card{
+  background:var(--card); border:1px solid var(--border);
+  border-radius:var(--r); padding:20px; margin-bottom:14px;
+}
+.card-label{
+  font-size:15px; font-weight:700; color:var(--text2);
+  margin-bottom:14px; display:flex; align-items:center; gap:8px;
+}
 
-  /* BUTTON */
-  .btn {
-    display:flex; align-items:center; justify-content:center; gap:8px;
-    width:100%; padding:15px 20px; border-radius:12px; border:none;
-    font-family:var(--font); font-size:17px; font-weight:700;
-    cursor:pointer; transition:all .18s; min-height:52px;
-    -webkit-tap-highlight-color:transparent;
-  }
-  .btn-primary { background:linear-gradient(135deg,var(--accent),#d97706); color:#0a0e1a; }
-  .btn-primary:hover  { transform:translateY(-1px); box-shadow:0 8px 24px rgba(245,158,11,.35); }
-  .btn-primary:active { transform:translateY(0); }
+/* ══ FORM ════════════════════════════════════════ */
+.form-grid{display:grid; grid-template-columns:1fr 1fr; gap:13px; margin-bottom:16px;}
+@media(max-width:480px){.form-grid{grid-template-columns:1fr;}}
 
-  /* RESULT */
-  #result { display:none; }
-  .result-hero {
-    background:linear-gradient(135deg,#0f2318,#111827);
-    border:1px solid rgba(16,185,129,.22);
-    border-radius:var(--r); padding:22px; margin-bottom:14px;
-  }
-  .res-badge { font-size:11px; color:var(--acc2); font-weight:700; letter-spacing:.5px; text-transform:uppercase; margin-bottom:8px; }
-  .res-oil   { font-size:46px; font-weight:700; color:var(--accent); line-height:1; margin-bottom:8px; }
-  .res-std   { font-size:14px; color:var(--text2); line-height:1.5; }
+.field-label{
+  display:block; font-size:15px; font-weight:600;
+  color:var(--text2); margin-bottom:8px;
+}
+/* font-size:16px on inputs prevents iOS auto-zoom */
+select,
+input[type="text"],
+input[type="number"],
+input[type="email"]{
+  width:100%; background:var(--bg2);
+  border:1px solid var(--border); border-radius:10px;
+  padding:14px 16px;
+  font-family:var(--font); font-size:16px; color:var(--text);
+  outline:none; transition:border-color .2s;
+  direction:rtl; appearance:none; -webkit-appearance:none;
+  /* min touch target height */
+  min-height:50px;
+}
+select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748b' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:left 14px center;
+  padding-left:36px;
+}
+select:focus,input:focus{border-color:var(--accent); outline:none;}
+select:disabled{opacity:.35; cursor:not-allowed;}
+select option{background:var(--bg2);}
 
-  .stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px; }
-  @media(max-width:400px){ .stats-row{ grid-template-columns:1fr 1fr; } }
-  .stat-box {
-    background:var(--bg3); border:1px solid var(--border);
-    border-radius:12px; padding:14px; text-align:center;
-  }
-  .stat-val   { font-size:24px; font-weight:700; color:var(--accent); line-height:1.1; }
-  .stat-unit  { font-size:12px; color:var(--accent); font-weight:600; }
-  .stat-label { font-size:12px; color:var(--text3); margin-top:4px; }
+/* VIN input — LTR */
+input[type="text"].vin-field{
+  direction:ltr; text-align:center;
+  letter-spacing:3px; font-size:16px;
+  text-transform:uppercase; font-weight:600;
+}
 
-  .warn-box {
-    background:rgba(239,68,68,.07); border:1px solid rgba(239,68,68,.2);
-    border-radius:12px; padding:14px 16px;
-    font-size:14px; color:#fca5a5; line-height:1.65; margin-bottom:12px;
-  }
-  .tip-box {
-    background:rgba(59,130,246,.07); border:1px solid rgba(59,130,246,.2);
-    border-radius:12px; padding:14px 16px;
-    font-size:14px; color:#93c5fd; line-height:1.65; margin-bottom:12px;
-  }
+/* ══ BUTTONS ═════════════════════════════════════ */
+.btn{
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  width:100%; padding:16px 20px; border-radius:12px; border:none;
+  font-family:var(--font); font-size:17px; font-weight:700;
+  cursor:pointer; transition:all .18s;
+  min-height:54px; /* comfortable touch target */
+  -webkit-tap-highlight-color:transparent;
+}
+.btn-primary{background:linear-gradient(135deg,var(--accent),#d97706); color:#0a0e1a;}
+.btn-primary:hover{transform:translateY(-1px); box-shadow:0 8px 24px rgba(245,158,11,.35);}
+.btn-primary:active{transform:translateY(0);}
+.btn-blue{background:linear-gradient(135deg,var(--acc3),#1d4ed8); color:#fff;}
+.btn-blue:hover{transform:translateY(-1px); box-shadow:0 8px 24px rgba(59,130,246,.35);}
+.btn-blue:active{transform:translateY(0);}
 
-  /* EXPLAIN */
-  .explain-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-  @media(max-width:480px){ .explain-grid{ grid-template-columns:1fr; } }
-  .explain-card {
-    background:var(--bg3); border:1px solid var(--border);
-    border-radius:14px; padding:18px;
-    cursor:pointer; transition:all .18s;
-    -webkit-tap-highlight-color:transparent;
-  }
-  .explain-card:hover  { border-color:var(--accent); transform:translateY(-2px); }
-  .ex-code  { font-size:26px; font-weight:700; color:var(--accent); margin-bottom:6px; }
-  .ex-name  { font-size:14px; font-weight:700; color:var(--text); margin-bottom:5px; }
-  .ex-plain { font-size:13px; color:var(--text3); line-height:1.6; }
-  .ex-detail {
-    display:none; margin-top:12px; padding-top:12px;
-    border-top:1px solid var(--border);
-    font-size:13px; color:var(--text2); line-height:1.75;
-  }
-  .explain-card.open .ex-detail { display:block; }
+/* ══ RESULT ══════════════════════════════════════ */
+#result{display:none;}
+.result-hero{
+  background:linear-gradient(135deg,#0f2318,#0d1b2a);
+  border:1px solid rgba(16,185,129,.25);
+  border-radius:var(--r); padding:20px; margin-bottom:14px;
+}
+.res-car-tag{
+  font-size:11px; color:var(--acc2); font-weight:700;
+  letter-spacing:.6px; text-transform:uppercase; margin-bottom:12px;
+}
+.res-oil-row{display:flex; align-items:flex-start; gap:16px; flex-wrap:wrap; margin-bottom:12px;}
+.res-oil-num{font-size:46px; font-weight:700; color:var(--accent); line-height:1;}
+.res-oil-meaning{flex:1; min-width:140px;}
+.res-oil-meaning .lbl{font-size:11px; color:var(--text3); margin-bottom:4px;}
+.res-oil-meaning .val{font-size:15px; color:var(--text); font-weight:600; line-height:1.4;}
+.res-badges{display:flex; gap:8px; flex-wrap:wrap;}
+.res-badge-item{
+  font-size:12px; font-weight:700; padding:4px 12px;
+  border-radius:20px;
+}
+.rb-green{background:rgba(16,185,129,.15); color:var(--acc2);}
+.rb-gold{background:rgba(245,158,11,.12); color:var(--accent);}
 
-  /* COMPARE */
-  .tbl-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
-  .compare-table { width:100%; border-collapse:collapse; font-size:14px; min-width:520px; }
-  .compare-table th {
-    padding:12px 14px; text-align:center;
-    font-size:13px; font-weight:700; color:var(--text3);
-    border-bottom:1px solid var(--border);
-  }
-  .compare-table th:first-child { text-align:right; }
-  .compare-table td {
-    padding:13px 14px; text-align:center;
-    border-bottom:1px solid rgba(255,255,255,.03);
-    color:var(--text2); font-size:13px;
-  }
-  .compare-table td:first-child { text-align:right; color:var(--text3); }
-  .compare-table tr:hover td { background:rgba(255,255,255,.02); }
-  .badge { display:inline-block; padding:3px 11px; border-radius:20px; font-size:12px; font-weight:700; }
-  .b-gold  { background:rgba(245,158,11,.15); color:var(--accent); }
-  .b-green { background:rgba(16,185,129,.15);  color:var(--acc2); }
-  .b-blue  { background:rgba(59,130,246,.15);  color:var(--acc3); }
+.stats-row{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px;}
+@media(max-width:380px){.stats-row{grid-template-columns:1fr 1fr;}}
+.stat-box{
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:12px; padding:14px 10px; text-align:center;
+}
+.stat-val{font-size:24px; font-weight:700; color:var(--accent); line-height:1.1;}
+.stat-unit{font-size:11px; color:var(--accent); font-weight:600;}
+.stat-label{font-size:11px; color:var(--text3); margin-top:4px; line-height:1.3;}
 
-  /* CALCULATOR */
-  .calc-result {
-    display:none;
-    background:linear-gradient(135deg,#0e2118,#0e1a28);
-    border:1px solid rgba(16,185,129,.25);
-    border-radius:var(--r); padding:24px; margin-top:16px; text-align:center;
-  }
-  .calc-km-num { font-size:58px; font-weight:700; color:var(--acc2); line-height:1; }
-  .calc-status {
-    display:inline-block; margin-top:14px;
-    padding:8px 22px; border-radius:20px;
-    font-size:15px; font-weight:700;
-  }
-  .s-good   { background:rgba(16,185,129,.15); color:var(--acc2); }
-  .s-warn   { background:rgba(245,158,11,.15);  color:var(--accent); }
-  .s-danger { background:rgba(239,68,68,.15);   color:var(--danger); }
-  .prog-wrap { margin:16px 0 0; }
-  .prog-labels { display:flex; justify-content:space-between; font-size:12px; color:var(--text3); margin-bottom:7px; }
-  .prog-bar  { height:9px; background:var(--bg2); border-radius:5px; overflow:hidden; }
-  .prog-fill { height:100%; border-radius:5px; transition:width .55s ease; }
-  .pf-green  { background:linear-gradient(90deg,var(--acc2),#059669); }
-  .pf-orange { background:linear-gradient(90deg,var(--accent),#d97706); }
-  .pf-red    { background:linear-gradient(90deg,var(--danger),#dc2626); }
+.warn-box{
+  background:rgba(239,68,68,.07); border:1px solid rgba(239,68,68,.2);
+  border-radius:12px; padding:14px 16px;
+  font-size:15px; color:#fca5a5; line-height:1.7; margin-bottom:12px;
+}
+.tip-box{
+  background:rgba(59,130,246,.07); border:1px solid rgba(59,130,246,.2);
+  border-radius:12px; padding:14px 16px;
+  font-size:15px; color:#93c5fd; line-height:1.7; margin-bottom:12px;
+}
 
-  /* FOOTER */
-  .site-footer { border-top:1px solid var(--border); padding:36px 20px 48px; max-width:800px; margin:0 auto; }
-  .email-capture {
-    background:var(--card); border:1px solid rgba(245,158,11,.2);
-    border-radius:var(--r); padding:24px; margin-bottom:32px; text-align:center;
-  }
-  .ec-icon  { font-size:26px; margin-bottom:8px; }
-  .ec-title { font-size:17px; font-weight:700; margin-bottom:6px; }
-  .ec-sub   { font-size:13px; color:var(--text3); margin-bottom:18px; line-height:1.6; }
-  .ec-row   { display:flex; gap:10px; max-width:420px; margin:0 auto; flex-wrap:wrap; justify-content:center; }
-  .ec-row input { flex:1; min-width:180px; direction:ltr; text-align:center; }
-  .ec-btn {
-    background:linear-gradient(135deg,var(--accent),#d97706);
-    color:#0a0e1a; border:none; border-radius:10px;
-    padding:13px 22px; font-family:var(--font); font-size:15px; font-weight:700;
-    cursor:pointer; white-space:nowrap;
-    -webkit-tap-highlight-color:transparent;
-  }
-  #email-thanks { display:none; margin-top:12px; font-size:14px; color:var(--acc2); font-weight:600; }
+/* ══ EXPLAIN GRID ════════════════════════════════ */
+.explain-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+@media(max-width:480px){.explain-grid{grid-template-columns:1fr;}}
+.explain-card{
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:14px; padding:18px;
+  cursor:pointer; transition:all .18s;
+  -webkit-tap-highlight-color:transparent;
+}
+.explain-card:hover{border-color:var(--accent); transform:translateY(-2px);}
+.explain-card:active{transform:translateY(0);}
+.ex-code{font-size:26px; font-weight:700; color:var(--accent); margin-bottom:5px;}
+.ex-name{font-size:14px; font-weight:700; color:var(--text); margin-bottom:5px;}
+.ex-plain{font-size:13px; color:var(--text3); line-height:1.6;}
+.ex-detail{
+  display:none; margin-top:12px; padding-top:12px;
+  border-top:1px solid var(--border);
+  font-size:14px; color:var(--text2); line-height:1.8;
+}
+.explain-card.open .ex-detail{display:block;}
 
-  .footer-divider { display:flex; align-items:center; gap:12px; margin-bottom:22px; }
-  .footer-divider::before,.footer-divider::after { content:''; flex:1; height:1px; background:rgba(255,255,255,.05); }
-  .footer-divider span { font-size:12px; color:var(--text3); white-space:nowrap; }
+/* ══ COMPARE ═════════════════════════════════════ */
+.tbl-wrap{overflow-x:auto; -webkit-overflow-scrolling:touch;}
+.compare-table{width:100%; border-collapse:collapse; font-size:14px; min-width:500px;}
+.compare-table th{
+  padding:12px 14px; text-align:center;
+  font-size:13px; font-weight:700; color:var(--text3);
+  border-bottom:1px solid var(--border);
+}
+.compare-table th:first-child{text-align:right;}
+.compare-table td{
+  padding:13px 14px; text-align:center;
+  border-bottom:1px solid rgba(255,255,255,.03);
+  color:var(--text2); font-size:13px;
+}
+.compare-table td:first-child{text-align:right; color:var(--text3);}
+.compare-table tr:hover td{background:rgba(255,255,255,.02);}
+.badge{display:inline-block; padding:3px 11px; border-radius:20px; font-size:12px; font-weight:700;}
+.b-gold{background:rgba(245,158,11,.15); color:var(--accent);}
+.b-green{background:rgba(16,185,129,.15); color:var(--acc2);}
+.b-blue{background:rgba(59,130,246,.15); color:var(--acc3);}
 
-  .social-links { display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-bottom:20px; }
-  .social-link {
-    display:flex; align-items:center; gap:8px;
-    background:var(--bg3); border:1px solid var(--border);
-    border-radius:12px; padding:11px 18px;
-    text-decoration:none; color:var(--text2);
-    font-size:14px; font-weight:600; transition:all .18s;
-    -webkit-tap-highlight-color:transparent;
-  }
-  .social-link:hover { transform:translateY(-2px); }
-  .social-link.x:hover        { border-color:#e2e8f0; color:#e2e8f0; }
-  .social-link.linkedin:hover { border-color:#60a5fa; color:#60a5fa; }
-  .social-link.snap:hover     { border-color:#FFFC00; color:#FFFC00; }
+/* ══ CALCULATOR ══════════════════════════════════ */
+.calc-result{
+  display:none;
+  background:linear-gradient(135deg,#0e2118,#0e1a28);
+  border:1px solid rgba(16,185,129,.25);
+  border-radius:var(--r); padding:24px; margin-top:16px; text-align:center;
+}
+.calc-km-num{font-size:56px; font-weight:700; color:var(--acc2); line-height:1;}
+.calc-status{
+  display:inline-block; margin-top:14px;
+  padding:9px 24px; border-radius:20px;
+  font-size:15px; font-weight:700;
+}
+.s-good{background:rgba(16,185,129,.15); color:var(--acc2);}
+.s-warn{background:rgba(245,158,11,.15); color:var(--accent);}
+.s-danger{background:rgba(239,68,68,.15); color:var(--danger);}
+.prog-wrap{margin:16px 0 0;}
+.prog-labels{display:flex; justify-content:space-between; font-size:12px; color:var(--text3); margin-bottom:7px;}
+.prog-bar{height:9px; background:var(--bg2); border-radius:5px; overflow:hidden;}
+.prog-fill{height:100%; border-radius:5px; transition:width .55s ease;}
+.pf-green{background:linear-gradient(90deg,var(--acc2),#059669);}
+.pf-orange{background:linear-gradient(90deg,var(--accent),#d97706);}
+.pf-red{background:linear-gradient(90deg,var(--danger),#dc2626);}
 
-  .footer-credit { text-align:center; font-size:12px; color:var(--text3); line-height:1.9; }
-  .footer-credit strong { color:var(--text2); }
+/* ══ VIN BOX ═════════════════════════════════════ */
+.vin-hint{
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:12px; padding:14px 16px;
+  font-size:14px; color:var(--text2); line-height:1.85;
+  margin-bottom:14px;
+}
+.vin-row{display:flex; gap:10px; flex-wrap:wrap;}
+.vin-row input{flex:1; min-width:190px;}
+.vin-btn{
+  background:linear-gradient(135deg,var(--acc3),#1d4ed8);
+  color:#fff; border:none; border-radius:10px;
+  padding:0 22px; font-family:var(--font);
+  font-size:16px; font-weight:700;
+  cursor:pointer; white-space:nowrap;
+  min-height:50px;
+  -webkit-tap-highlight-color:transparent;
+}
+.vin-btn-gold{
+  background:linear-gradient(135deg,var(--accent),#d97706);
+  color:#0a0e1a; border:none; border-radius:10px;
+  padding:0 22px; font-family:var(--font);
+  font-size:16px; font-weight:700;
+  cursor:pointer; white-space:nowrap;
+  min-height:50px;
+  -webkit-tap-highlight-color:transparent;
+}
+.vin-thanks{display:none; margin-top:12px; font-size:14px; color:var(--acc2); font-weight:600;}
 
-  /* MOBILE */
-  @media(max-width:480px){
-    .pg-title    { font-size:23px; }
-    .card        { padding:16px; }
-    .stat-val    { font-size:20px; }
-    .res-oil     { font-size:40px; }
-    .calc-km-num { font-size:48px; }
-    .tab         { font-size:14px; padding:10px 14px; }
-    .logo-text h1{ font-size:14px; }
-  }
+/* ══ FOOTER ══════════════════════════════════════ */
+.site-footer{
+  border-top:1px solid var(--border);
+  padding:32px 20px calc(32px + var(--safe-b));
+  max-width:800px; margin:0 auto;
+}
+.email-capture{
+  background:var(--card); border:1px solid rgba(245,158,11,.2);
+  border-radius:var(--r); padding:22px; margin-bottom:28px; text-align:center;
+}
+.ec-icon{font-size:24px; margin-bottom:8px;}
+.ec-title{font-size:17px; font-weight:700; margin-bottom:6px;}
+.ec-sub{font-size:14px; color:var(--text3); margin-bottom:16px; line-height:1.7;}
+.ec-row{display:flex; gap:10px; max-width:420px; margin:0 auto; flex-wrap:wrap; justify-content:center;}
+.ec-row input{flex:1; min-width:180px; direction:ltr; text-align:center;}
+.ec-btn{
+  background:linear-gradient(135deg,var(--accent),#d97706);
+  color:#0a0e1a; border:none; border-radius:10px;
+  padding:0 22px; font-family:var(--font); font-size:16px; font-weight:700;
+  cursor:pointer; white-space:nowrap; min-height:50px;
+  -webkit-tap-highlight-color:transparent;
+}
+#email-thanks{display:none; margin-top:12px; font-size:14px; color:var(--acc2); font-weight:600;}
+
+.footer-div{display:flex; align-items:center; gap:12px; margin-bottom:20px;}
+.footer-div::before,.footer-div::after{content:''; flex:1; height:1px; background:rgba(255,255,255,.05);}
+.footer-div span{font-size:12px; color:var(--text3); white-space:nowrap;}
+
+.social-links{display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:20px;}
+.social-link{
+  display:flex; align-items:center; gap:8px;
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:12px; padding:12px 18px;
+  text-decoration:none; color:var(--text2);
+  font-size:14px; font-weight:600; transition:all .18s;
+  -webkit-tap-highlight-color:transparent;
+  min-height:48px;
+}
+.social-link:hover{transform:translateY(-2px);}
+.social-link.sl-x:hover{border-color:#e2e8f0; color:#e2e8f0;}
+.social-link.sl-li:hover{border-color:#60a5fa; color:#60a5fa;}
+.social-link.sl-sn:hover{border-color:#FFFC00; color:#FFFC00;}
+
+.footer-credit{text-align:center; font-size:12px; color:var(--text3); line-height:1.9;}
+.footer-credit strong{color:var(--text2);}
+
+.disclaimer{
+  max-width:800px; margin:0 auto;
+  padding:0 20px calc(24px + var(--safe-b));
+  text-align:center;
+}
+.disclaimer p{
+  font-size:11px; color:var(--text3); line-height:1.9;
+  max-width:640px; margin:0 auto;
+  border-top:1px solid rgba(255,255,255,.05);
+  padding-top:20px;
+}
+
+/* ══ MOBILE OVERRIDES ════════════════════════════ */
+@media(max-width:480px){
+  .pg-title{font-size:21px;}
+  .pg-sub{font-size:14px;}
+  .card{padding:16px;}
+  .res-oil-num{font-size:40px;}
+  .stat-val{font-size:21px;}
+  .calc-km-num{font-size:48px;}
+  .tab{font-size:13px; padding:10px 13px;}
+  .logo-text h1{font-size:14px;}
+  /* stack the result hero oil row on very small screens */
+  .res-oil-row{gap:10px;}
+}
+@media(max-width:360px){
+  .tabs{padding:12px 10px 0;}
+  .tab{padding:10px 11px; font-size:12px;}
+  .page{padding:16px 12px 48px;}
+}
 </style>
 </head>
 <body>
 
+<!-- ══ HEADER ══════════════════════════════════════ -->
 <header>
   <div class="logo-icon">🔧</div>
   <div class="logo-text">
@@ -286,6 +386,7 @@
   </div>
 </header>
 
+<!-- ══ TABS ════════════════════════════════════════ -->
 <div class="tabs">
   <button class="tab active" onclick="switchTab('search',this)">🔍 ابحث بسيارتك</button>
   <button class="tab" onclick="switchTab('explain',this)">📖 وش يعني هذا؟</button>
@@ -293,17 +394,23 @@
   <button class="tab" onclick="switchTab('calc',this)">📅 حاسبة التغيير</button>
 </div>
 
-<!-- PAGE 1 -->
+<!-- ══════════════════════════════════════════════════
+     PAGE 1 — البحث
+══════════════════════════════════════════════════ -->
 <div id="page-search" class="page active">
   <p class="pg-title">اعرف زيت سيارتك الصح</p>
-  <p class="pg-sub">اختر سيارتك أو أرسل رقم الهيكل، والنتيجة هنا مبدئية وواضحة للمستخدم العادي</p>
-  <div class="card" style="border-color:rgba(245,158,11,.25);background:linear-gradient(135deg,rgba(245,158,11,.07),rgba(20,29,46,1));">
-    <div class="card-label" style="color:var(--accent);">🧭 ابدأ برقم الهيكل إذا تبغى النتيجة الأدق</div>
-    <div style="font-size:15px;color:var(--text2);line-height:1.9;">
-      اختيار السيارة من القائمة يعطيك <strong style="color:var(--text)">نتيجة مبدئية سريعة</strong>، لكن <strong style="color:var(--accent)">رقم الهيكل VIN</strong> هو الطريق الأدق للتأكد من الفئة والمحرك والمواصفة كما وردت في دليل الشركة المصنّعة.
+  <p class="pg-sub">اختر سيارتك من القائمة للنتيجة المبدئية، أو أرسل رقم الهيكل للتأكد من مواصفة دليل المالك بالضبط</p>
+
+  <!-- ارشاد -->
+  <div class="card" style="border-color:rgba(245,158,11,.25);background:linear-gradient(135deg,rgba(245,158,11,.06),var(--card));">
+    <div class="card-label" style="color:var(--accent);">🧭 نتيجة مبدئية أو نتيجة دقيقة؟</div>
+    <div style="font-size:15px;color:var(--text2);line-height:1.85;">
+      <strong style="color:var(--text)">اختيار السيارة من القائمة</strong> يعطيك نتيجة مبدئية سريعة مبنية على بيانات عامة.<br>
+      <strong style="color:var(--accent)">رقم الهيكل (VIN)</strong> هو الطريق الأدق — يحدد الفئة والمحرك والمواصفة كما وردت في دليل الشركة المصنّعة تحديداً.
     </div>
   </div>
 
+  <!-- فورم السيارة -->
   <div class="card">
     <div class="card-label">🚗 بيانات سيارتك</div>
     <div class="form-grid">
@@ -311,7 +418,7 @@
         <label class="field-label">الشركة المصنّعة</label>
         <select id="brand" onchange="updateModels()">
           <option value="">— اختر الشركة —</option>
-          <option value="other">سيارتي غير موجودة في القائمة</option>
+          <option value="other">⚠️ سيارتي غير موجودة</option>
           <option value="toyota">تويوتا</option>
           <option value="hyundai">هيونداي</option>
           <option value="kia">كيا</option>
@@ -343,7 +450,7 @@
         </select>
       </div>
     </div>
-    <div style="margin-bottom:18px">
+    <div style="margin-bottom:16px;">
       <label class="field-label">ظروف قيادتك اليومية</label>
       <select id="driving">
         <option value="normal">عادي — طريق سريع ومسافات معقولة</option>
@@ -351,150 +458,170 @@
       </select>
     </div>
     <button class="btn btn-primary" onclick="analyze()">🔍 حلّل سيارتي</button>
-    <div style="font-size:13px;color:var(--text3);margin-top:12px;line-height:1.8;">هذه نتيجة مبدئية مبنية على قاعدة البيانات الحالية. للتأكيد النهائي: أرسل رقم الهيكل وسنرجع لدليل المالك الرسمي.</div>
+    <p style="font-size:13px;color:var(--text3);margin-top:10px;line-height:1.7;">
+      هذه نتيجة مبدئية — للتأكيد النهائي أرسل رقم الهيكل أسفله.
+    </p>
   </div>
 
-  <!-- سيارتك غير موجودة؟ -->
-  <div class="card" style="border-color:rgba(59,130,246,.25);background:rgba(59,130,246,.05);">
+  <!-- سيارتك غير موجودة -->
+  <div class="card" id="vin-where" style="border-color:rgba(59,130,246,.25);background:rgba(59,130,246,.04);">
     <div class="card-label" style="color:var(--acc3);">🔎 سيارتك غير موجودة؟ رقم الهيكل يحسمها</div>
-    <div style="font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:16px;">
-      أرسل لنا رقم الهيكل (VIN) وسنبحث لك في دليل المالك الرسمي للشركة المصنّعة ونرسل لك التوصية الصحيحة مباشرة.
+    <p style="font-size:15px;color:var(--text2);line-height:1.85;margin-bottom:14px;">
+      أرسل رقم الهيكل (VIN) وسنبحث في دليل المالك الرسمي للشركة المصنّعة ونرسل لك التوصية الصحيحة مباشرة.
+    </p>
+    <div class="vin-hint">
+      <strong style="color:var(--text);display:block;margin-bottom:8px;">📍 أين تجد رقم الهيكل؟</strong>
+      رقم الهيكل (VIN) يتكون من <strong style="color:var(--accent)">17 رمزاً</strong> ويوجد في:<br>
+      • أسفل الزجاج الأمامي من جهة السائق<br>
+      • على إطار باب السائق (ملصق)<br>
+      • محفوراً تحت غطاء المحرك<br>
+      • في استمارة المركبة (رخصة السير) أو وثيقة التأمين<br><br>
+      <strong style="color:var(--acc2);">📱 الأسهل:</strong> انسخه مباشرة من تطبيق <strong>أبشر</strong> أو <strong>توكلنا</strong> — قسم خدمات المركبة.
     </div>
-    <div id="vin-where" style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:16px;font-size:13px;color:var(--text2);line-height:1.8;">
-      <strong style="color:var(--text);display:block;margin-bottom:6px;">📍 أين تجد رقم الهيكل؟</strong>
-      رقم الهيكل (VIN) يتكون من <strong style="color:var(--accent)">17 رمزاً</strong> ويوجد في:
-      <br>• أسفل الزجاج الأمامي من جهة السائق
-      <br>• على إطار باب السائق (ملصق)
-      <br>• محفوراً تحت غطاء المحرك
-      <br>• في استمارة المركبة (رخصة السير) أو وثيقة التأمين
-      <br><br>
-      <strong style="color:var(--acc2);">📱 الأسهل:</strong> يمكن نسخه مباشرة من تطبيق <strong>أبشر</strong> أو <strong>توكلنا خدمات</strong> من قسم خدمات المركبة.
+    <div class="vin-row">
+      <input type="text" id="vin-input" class="vin-field" placeholder="أدخل رقم الهيكل — 17 رمزاً" maxlength="17" autocapitalize="characters" autocomplete="off" spellcheck="false">
+      <button class="vin-btn" onclick="submitVin()">إرسال</button>
     </div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;">
-      <input type="text" id="vin-input" placeholder="أدخل رقم الهيكل — 17 رمزاً" maxlength="17"
-        style="flex:1;min-width:200px;direction:ltr;text-align:center;letter-spacing:2px;font-size:15px;text-transform:uppercase;">
-      <button onclick="submitVin()" style="background:linear-gradient(135deg,var(--acc3),#1d4ed8);color:#fff;border:none;border-radius:10px;padding:13px 22px;font-family:var(--font);font-size:15px;font-weight:700;cursor:pointer;white-space:nowrap;">إرسال</button>
-    </div>
-    <div id="vin-thanks" style="display:none;margin-top:12px;font-size:14px;color:var(--acc2);font-weight:600;">✅ تم استلام رقم الهيكل — سنتواصل معك بالتوصية قريباً!</div>
+    <p class="vin-thanks" id="vin-thanks">✅ تم استلام رقم الهيكل — سنتواصل معك بالتوصية قريباً!</p>
   </div>
 
-  <!-- النتيجة المبدئية -->
+  <!-- النتيجة -->
   <div id="result">
-    <!-- بانر النتيجة -->
-    <div style="background:linear-gradient(135deg,#0f2318,#0d1b2a);border:1px solid rgba(16,185,129,.25);border-radius:var(--r);padding:20px;margin-bottom:14px;">
-      <div style="font-size:11px;color:var(--acc2);font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px;" id="res-car-name"></div>
-      <!-- درجة اللزوجة بشكل بشري -->
-      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px;">
+
+    <!-- بطاقة النتيجة الرئيسية -->
+    <div class="result-hero">
+      <div class="res-car-tag" id="res-car-name"></div>
+      <div class="res-oil-row">
         <div>
           <div style="font-size:11px;color:var(--text3);margin-bottom:3px;">نوع الزيت المطلوب</div>
-          <div style="font-size:40px;font-weight:700;color:var(--accent);line-height:1;" id="res-viscosity"></div>
+          <div class="res-oil-num" id="res-viscosity"></div>
         </div>
-        <div style="flex:1;min-width:160px;">
-          <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">يعني إيش؟</div>
-          <div style="font-size:14px;color:var(--text);font-weight:600;" id="res-visco-meaning"></div>
+        <div class="res-oil-meaning">
+          <div class="lbl">يعني إيش؟</div>
+          <div class="val" id="res-visco-meaning"></div>
         </div>
       </div>
-      <!-- نوع الزيت والجودة -->
-      <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <span id="res-type-badge" style="font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;background:rgba(16,185,129,.15);color:var(--acc2);"></span>
-        <span id="res-std-badge"  style="font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;background:rgba(245,158,11,.12);color:var(--accent);"></span>
+      <div class="res-badges">
+        <span class="res-badge-item rb-green" id="res-type-badge"></span>
+        <span class="res-badge-item rb-gold"  id="res-std-badge"></span>
       </div>
     </div>
 
-    <!-- الأرقام الثلاثة -->
+    <!-- الأرقام -->
     <div class="stats-row">
-      <div class="stat-box"><div><span class="stat-val" id="res-qty-filter"></span> <span class="stat-unit">لتر</span></div><div class="stat-label">مع تغيير الفلتر</div></div>
-      <div class="stat-box"><div><span class="stat-val" id="res-qty-no"></span> <span class="stat-unit">لتر</span></div><div class="stat-label">بدون تغيير الفلتر</div></div>
-      <div class="stat-box"><div><span class="stat-val" id="res-interval"></span> <span class="stat-unit">كم</span></div><div class="stat-label">فترة التغيير</div></div>
+      <div class="stat-box">
+        <div><span class="stat-val" id="res-qty-filter"></span> <span class="stat-unit">لتر</span></div>
+        <div class="stat-label">مع تغيير الفلتر</div>
+      </div>
+      <div class="stat-box">
+        <div><span class="stat-val" id="res-qty-no"></span> <span class="stat-unit">لتر</span></div>
+        <div class="stat-label">بدون تغيير الفلتر</div>
+      </div>
+      <div class="stat-box">
+        <div><span class="stat-val" id="res-interval"></span> <span class="stat-unit">كم</span></div>
+        <div class="stat-label">فترة التغيير</div>
+      </div>
     </div>
 
     <div class="warn-box" id="res-warning"></div>
     <div class="tip-box"  id="res-tip"></div>
 
-    <!-- شرح مبسط -->
+    <!-- ترجمة بسيطة -->
     <div class="card">
       <div class="card-label">💡 ترجمة بالعربي البسيط</div>
       <div id="res-plain" style="font-size:15px;color:var(--text2);line-height:1.9;"></div>
     </div>
 
     <!-- تأكيد بالـ VIN -->
-    <div style="background:rgba(245,158,11,.05);border:1px solid rgba(245,158,11,.2);border-radius:var(--r);padding:20px;margin-bottom:16px;">
-      <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:6px;">🔒 هذه نتيجة مبدئية — أكّدها برقم الهيكل</div>
-      <div style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:14px;">
-        النتيجة أعلاه مبنية على بيانات عامة. للتأكد من المواصفة الدقيقة لسيارتك تحديداً (حسب فئتها وسوقها)، أدخل رقم الهيكل وسنراجع دليل المالك الرسمي للشركة المصنّعة ونرسل لك التوصية النهائية.
-      </div>
-      <div style="font-size:12px;color:var(--text3);background:var(--bg3);border-radius:10px;padding:12px;margin-bottom:14px;line-height:1.8;">
+    <div class="card" style="border-color:rgba(245,158,11,.2);background:rgba(245,158,11,.04);">
+      <div class="card-label" style="color:var(--accent);">🔒 هذه نتيجة مبدئية — أكّدها برقم الهيكل</div>
+      <p style="font-size:14px;color:var(--text2);line-height:1.75;margin-bottom:14px;">
+        النتيجة أعلاه مبنية على بيانات عامة. للتأكد من المواصفة الدقيقة لسيارتك تحديداً، أدخل رقم الهيكل وسنراجع دليل المالك الرسمي ونرسل لك التوصية النهائية.
+      </p>
+      <div class="vin-hint" style="margin-bottom:14px;">
         <strong style="color:var(--text2);">📍 أين رقم الهيكل؟</strong><br>
         أسفل الزجاج الأمامي (جهة السائق) • إطار باب السائق • أوراق السيارة<br>
-        <strong style="color:var(--acc2);">📱 الأسهل:</strong> انسخه من تطبيق <strong>أبشر</strong> أو <strong>توكلنا خدمات</strong> ← خدمات المركبة
+        <strong style="color:var(--acc2);">📱 الأسهل:</strong> انسخه من <strong>أبشر</strong> أو <strong>توكلنا</strong> ← خدمات المركبة
       </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <input type="text" id="vin-confirm" placeholder="رقم الهيكل — 17 رمزاً" maxlength="17"
-          style="flex:1;min-width:200px;direction:ltr;text-align:center;letter-spacing:2px;font-size:15px;text-transform:uppercase;">
-        <button onclick="submitVinConfirm()" style="background:linear-gradient(135deg,var(--accent),#d97706);color:#0a0e1a;border:none;border-radius:10px;padding:13px 22px;font-family:var(--font);font-size:15px;font-weight:700;cursor:pointer;white-space:nowrap;">أرسل للتأكيد</button>
+      <div class="vin-row">
+        <input type="text" id="vin-confirm" class="vin-field" placeholder="رقم الهيكل — 17 رمزاً" maxlength="17" autocapitalize="characters" autocomplete="off" spellcheck="false">
+        <button class="vin-btn-gold" onclick="submitVinConfirm()">أرسل للتأكيد</button>
       </div>
-      <div id="vin-confirm-thanks" style="display:none;margin-top:12px;font-size:14px;color:var(--acc2);font-weight:600;">✅ تم الإرسال — سنراجع دليل المالك ونرسل لك التوصية النهائية قريباً!</div>
+      <p class="vin-thanks" id="vin-confirm-thanks">✅ تم الإرسال — سنراجع دليل المالك ونرسل لك التوصية النهائية قريباً!</p>
     </div>
-  </div>
-</div>
 
-<!-- PAGE 2 -->
+  </div><!-- /#result -->
+</div><!-- /#page-search -->
+
+<!-- ══════════════════════════════════════════════════
+     PAGE 2 — شرح المصطلحات
+══════════════════════════════════════════════════ -->
 <div id="page-explain" class="page">
   <p class="pg-title">وش يعني هذا الرقم؟</p>
   <p class="pg-sub">الناس تسمع "زيرو دبليو عشرين" وما تعرف وش يعني — اضغط على أي بطاقة للتفاصيل</p>
   <div class="explain-grid">
     <div class="explain-card" onclick="this.classList.toggle('open')">
-      <div class="ex-code">0W-20</div><div class="ex-name">زيت خفيف جداً</div>
+      <div class="ex-code">0W-20</div>
+      <div class="ex-name">زيت خفيف جداً</div>
       <div class="ex-plain">يوصل للمحرك في أقل من ثانية من التشغيل</div>
-      <div class="ex-detail">الرقم قبل الـ W = سماكة في البرد — صفر يعني يسيل مثل الماء. الرقم بعده = سماكة في الحر — 20 خفيف. للمحركات الحديثة ذات الفجوات الضيقة.<br><br><strong style="color:var(--accent)">📌</strong> لا تبدّله لزيت أثقل — العكس هو الصح.</div>
+      <div class="ex-detail">الرقم قبل الـ W = سماكة في البرد — صفر يعني يسيل مثل الماء. الرقم بعده = سماكة في الحر — 20 خفيف. للمحركات الحديثة ذات الفجوات الضيقة.<br><br><strong style="color:var(--accent)">📌</strong> لا تبدّله لزيت أثقل — الأثقل من اللازم يتعب المحرك.</div>
     </div>
     <div class="explain-card" onclick="this.classList.toggle('open')">
-      <div class="ex-code">5W-30</div><div class="ex-name">زيت متوازن</div>
+      <div class="ex-code">5W-30</div>
+      <div class="ex-name">زيت متوازن</div>
       <div class="ex-plain">الأكثر انتشاراً في السيارات المتوسطة</div>
       <div class="ex-detail">خفيف في البرد (5) ومتوسط في الحر (30). يناسب معظم السيارات اليابانية والكورية من 2010 وما بعد.<br><br><strong style="color:var(--accent)">📌</strong> سيارتك من 2010–2018؟ غالباً هذا زيتك.</div>
     </div>
     <div class="explain-card" onclick="this.classList.toggle('open')">
-      <div class="ex-code">5W-40</div><div class="ex-name">زيت للأداء العالي</div>
+      <div class="ex-code">5W-40</div>
+      <div class="ex-name">زيت للأداء العالي</div>
       <div class="ex-plain">للمحركات القوية والأوروبية</div>
-      <div class="ex-detail">نفس خفة البرد (5) لكن أكثر سماكة في الحر (40). لـ BMW ومرسيدس والسيارات ذات التوربو.<br><br><strong style="color:var(--accent)">📌</strong> سيارة أوروبية؟ هذا غالباً زيتك — تأكد من رقم المعيار أيضاً.</div>
+      <div class="ex-detail">نفس خفة البرد (5) لكن أكثر سماكة في الحر (40). لـ BMW ومرسيدس والسيارات ذات التوربو.<br><br><strong style="color:var(--accent)">📌</strong> سيارة أوروبية؟ تأكد من رقم الاعتماد أيضاً — الدرجة وحدها لا تكفي.</div>
     </div>
     <div class="explain-card" onclick="this.classList.toggle('open')">
-      <div class="ex-code">API SP</div><div class="ex-name">شهادة الجودة الأمريكية</div>
+      <div class="ex-code">API SP</div>
+      <div class="ex-name">شهادة الجودة الأمريكية</div>
       <div class="ex-plain">أعلى معيار أمريكي للزيوت حالياً</div>
-      <div class="ex-detail">كل حرف جديد = تطور في الجودة. SP هو الأعلى الآن. يعني الزيت ما يترسّب ويحمي من الصدأ.<br><br><strong style="color:var(--accent)">📌</strong> دور على العلبة — لازم تشوف API SP أو SN كحد أدنى.</div>
+      <div class="ex-detail">كل حرف جديد = تطور في الجودة. SP هو الأعلى الآن. يعني الزيت ما يترسّب ويحمي من الصدأ.<br><br><strong style="color:var(--accent)">📌</strong> دور على علبة الزيت — لازم تشوف API SP أو SN كحد أدنى.</div>
     </div>
     <div class="explain-card" onclick="this.classList.toggle('open')">
-      <div class="ex-code">معدني</div><div class="ex-name">الزيت التقليدي</div>
-      <div class="ex-plain">"أبو الخمسة الآلاف" — للسيارات القديمة</div>
-      <div class="ex-detail">مستخرج من البترول مباشرة. يتلف أسرع في الحر. للسيارات قبل 2005 أو ذات الممشى العالي جداً.<br><br><strong style="color:var(--accent)">📌</strong> السيارات الحديثة لا تحتاجه — التغيير كل 5,000 كم ضروري.</div>
+      <div class="ex-code">معدني</div>
+      <div class="ex-name">الزيت التقليدي</div>
+      <div class="ex-plain">المعدني — "أبو الخمسة الآلاف" — للسيارات القديمة</div>
+      <div class="ex-detail">مستخرج من البترول مباشرة. يتلف أسرع خصوصاً في الحر. للسيارات قبل 2005 أو ذات الممشى العالي جداً.<br><br><strong style="color:var(--accent)">📌</strong> السيارات الحديثة لا تحتاجه — التغيير كل 5,000 كم ضروري.</div>
     </div>
     <div class="explain-card" onclick="this.classList.toggle('open')">
-      <div class="ex-code">تركيبي</div><div class="ex-name">الزيت الاصطناعي الكامل</div>
-      <div class="ex-plain">"أبو العشرة الآلاف" — للسيارات الحديثة</div>
-      <div class="ex-detail">مصنّع كيميائياً. يتحمل الحرارة الشديدة، يقلل الاحتكاك، يبقى صالحاً أطول. أغلى لكن يوفّر على المدى البعيد.<br><br><strong style="color:var(--accent)">📌</strong> أي سيارة من 2015+ تستحق زيت تركيبي.</div>
+      <div class="ex-code">تركيبي</div>
+      <div class="ex-name">الزيت الاصطناعي الكامل</div>
+      <div class="ex-plain">التخليقي — "أبو العشرة الآلاف" — للسيارات الحديثة</div>
+      <div class="ex-detail">مصنّع كيميائياً. يتحمل الحرارة الشديدة، يقلل الاحتكاك، يبقى صالحاً أطول. أغلى لكن يوفّر على المدى البعيد.<br><br><strong style="color:var(--accent)">📌</strong> أي سيارة من 2015 وما فوق تستحق زيت تخليقي.</div>
     </div>
     <div class="explain-card" onclick="this.classList.toggle('open')">
-      <div class="ex-code">فلتر</div><div class="ex-name">فلتر الزيت</div>
+      <div class="ex-code">فلتر</div>
+      <div class="ex-name">فلتر الزيت</div>
       <div class="ex-plain">يتغير مع كل تغيير زيت بدون استثناء</div>
-      <div class="ex-detail">الفلتر يمسك الشوائب. لو تركت القديم، الزيت الجديد يتلوث بسرعة.<br><br><strong style="color:var(--accent)">📌</strong> زيت جديد + فلتر قديم = نصف فائدة فقط.</div>
+      <div class="ex-detail">الفلتر يمسك الشوائب المتراكمة في الزيت. لو تركت القديم، الزيت الجديد يتلوث بسرعة.<br><br><strong style="color:var(--accent)">📌</strong> زيت جديد + فلتر قديم = نصف فائدة فقط.</div>
     </div>
     <div class="explain-card" onclick="this.classList.toggle('open')">
-      <div class="ex-code">⚠️ شاق</div><div class="ex-name">ظروف القيادة الشاقة</div>
+      <div class="ex-code">⚠️ شاق</div>
+      <div class="ex-name">ظروف القيادة الشاقة</div>
       <div class="ex-plain">متى تقلّص فترة التغيير للنصف؟</div>
       <div class="ex-detail">الظروف الشاقة: زحام يومي خانق، رحلات قصيرة أقل من 8 كم، غبار كثيف، حرارة شديدة.<br><br><strong style="color:var(--accent)">📌</strong> معظم قيادة المدن السعودية = ظروف شاقة. غيّر الزيت أبكر.</div>
     </div>
   </div>
 </div>
 
-<!-- PAGE 3 -->
+<!-- ══════════════════════════════════════════════════
+     PAGE 3 — المقارنة
+══════════════════════════════════════════════════ -->
 <div id="page-compare" class="page">
-  <p class="pg-title">معدني؟ شبه تركيبي؟ تركيبي؟</p>
-  <p class="pg-sub">قارن الأنواع بنفسك واختر اللي يناسب سيارتك وميزانيتك</p>
+  <p class="pg-title">غير تخليقي؟ نص تخليقي؟ تخليقي؟</p>
+  <p class="pg-sub">الناس تقول: "غير تخليقي، نص تخليقي، تخليقي" — هنا نشرح الفرق ونساعدك تختار</p>
   <div class="card">
     <div class="tbl-wrap">
       <table class="compare-table">
         <thead>
-          <tr><th>المعيار</th><th>🟤 معدني</th><th>🟡 شبه تركيبي</th><th>🟢 تركيبي كامل</th></tr>
+          <tr><th>المعيار</th><th>🟤 غير تخليقي (معدني)</th><th>🟡 نص تخليقي</th><th>🟢 تخليقي كامل</th></tr>
         </thead>
         <tbody>
           <tr><td>فترة التغيير</td><td>4,000–5,000 كم</td><td>7,000–8,000 كم</td><td>10,000–15,000 كم</td></tr>
@@ -513,14 +640,16 @@
     <div style="font-size:15px;color:var(--text2);line-height:1.9;">
       فكرة التغيير كل 5,000 كم جاءت من زمن الزيت المعدني القديم — وكانت صحيحة في وقتها.<br>
       السيارات الحديثة مصممة على زيوت تركيبية تتحمل 10,000–15,000 كم.<br><br>
-      <strong style="color:var(--accent)">لو غيّرت تركيبي على 5,000 كم — تضيع فلوس بدون فائدة.</strong><br>
-      <strong style="color:var(--danger)">لو غيّرت معدني على 10,000 كم — تتلف المحرك.</strong><br><br>
-      القاعدة الذهبية: <strong style="color:var(--acc2)">اتّبع ما كتبه المصنع في دليل المالك — لا العادات.</strong>
+      <strong style="color:var(--accent);">لو غيّرت تخليقي على 5,000 كم — تضيع فلوس بدون فائدة.</strong><br>
+      <strong style="color:var(--danger);">لو غيّرت غير تخليقي (معدني) على 10,000 كم — تتلف المحرك.</strong><br><br>
+      القاعدة الذهبية: <strong style="color:var(--acc2);">اتّبع ما كتبه المصنع في دليل المالك — لا العادات.</strong>
     </div>
   </div>
 </div>
 
-<!-- PAGE 4 -->
+<!-- ══════════════════════════════════════════════════
+     PAGE 4 — حاسبة التغيير
+══════════════════════════════════════════════════ -->
 <div id="page-calc" class="page">
   <p class="pg-title">هل حان وقت تغيير الزيت؟</p>
   <p class="pg-sub">أدخل آخر تغيير والعداد الحالي — نحسبها لك فوراً</p>
@@ -564,42 +693,45 @@
   </div>
   <div class="card">
     <div class="card-label">⚠️ تنبيهات للقيادة في السعودية</div>
-    <div style="font-size:14px;color:var(--text2);line-height:1.9;">
+    <div style="font-size:15px;color:var(--text2);line-height:1.9;">
       ✓ <strong>الزحام اليومي</strong> — يحرق الزيت أسرع من الطريق السريع<br>
-      ✓ <strong>حرارة الصيف (فوق 40°)</strong> — الزيت يتأكسد بسرعة، لا تتأخر<br>
+      ✓ <strong>حرارة الصيف فوق 40°</strong> — الزيت يتأكسد بسرعة، لا تتأخر<br>
       ✓ <strong>الغبار والأتربة</strong> — يلوّث الزيت قبل انتهاء فترته<br>
       ✓ <strong>رحلات أقل من 10 كم</strong> — المحرك لا يصل لحرارته المثالية
     </div>
   </div>
 </div>
 
-<!-- FOOTER -->
+<!-- ══ FOOTER ══════════════════════════════════════ -->
 <footer class="site-footer">
+
+  <!-- البريد الإلكتروني -->
   <div class="email-capture">
     <div class="ec-icon">📬</div>
-    <div class="ec-title">احصل على روشتة سيارتك</div>
+    <div class="ec-title">احصل على التوصية المناسبة لزيت سيارتك</div>
     <div class="ec-sub">أدخل إيميلك وخلنا نرسلها لك + تنبيه قبل موعد التغيير</div>
     <div class="ec-row">
       <input type="email" id="email-input" placeholder="بريدك الإلكتروني">
       <button class="ec-btn" onclick="saveEmail()">تسجيل</button>
     </div>
-    <div id="email-thanks">✅ تم التسجيل — سنتواصل معك قريباً!</div>
+    <p id="email-thanks">✅ تم التسجيل — سنتواصل معك قريباً!</p>
   </div>
 
-  <div class="footer-divider"><span>تواصل مع المطوّر</span></div>
+  <div class="footer-div"><span>تواصل مع المطوّر</span></div>
 
+  <!-- الحسابات -->
   <div class="social-links">
 
-    <!-- X (Twitter) — الشعار الصح لـ X -->
-    <a class="social-link x" href="https://x.com/almohammdin" target="_blank" rel="noopener" title="X / تويتر">
+    <!-- X / تويتر -->
+    <a class="social-link sl-x" href="https://x.com/almohammdin" target="_blank" rel="noopener" title="X / تويتر">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
         <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H6.314l-5.106-6.694L2.896 21.75H.588l7.753-8.835L.461 2.25h6.679l4.632 6.132 5.484-6.132zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
       </svg>
       تويتر
     </a>
 
-    <!-- LinkedIn — الشعار الصح -->
-    <a class="social-link linkedin" href="https://www.linkedin.com/in/naif-almohammdi/" target="_blank" rel="noopener" title="لينكد إن">
+    <!-- لينكد إن -->
+    <a class="social-link sl-li" href="https://www.linkedin.com/in/naif-almohammdi/" target="_blank" rel="noopener" title="لينكد إن">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
         <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
         <rect x="2" y="9" width="4" height="12"/>
@@ -608,8 +740,8 @@
       لينكد إن
     </a>
 
-    <!-- Snapchat — الشبح الصح (Ghost) + الرابط الجديد -->
-    <a class="social-link snap" href="https://snapchat.com/t/CEV6vGy5" target="_blank" rel="noopener" title="سناب شات — NAIF FAWZY">
+    <!-- سناب شات — NAIF FAWZY -->
+    <a class="social-link sl-sn" href="https://snapchat.com/t/CEV6vGy5" target="_blank" rel="noopener" title="سناب شات — NAIF FAWZY">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="#FFFC00">
         <path d="M12.206.793c.99 0 4.347.276 5.93 3.821.529 1.193.403 3.219.299 4.847l-.003.06c-.012.18-.022.345-.03.51.075.045.203.09.401.09.3-.016.659-.12 1.033-.301.165-.088.344-.104.464-.104.182 0 .359.029.509.09.45.149.734.479.734.838.015.449-.39.839-1.213 1.168-.089.029-.209.075-.344.119-.45.135-1.139.36-1.333.81-.09.224-.061.524.12.868l.015.015c.06.136 1.526 3.475 4.791 4.014.255.044.435.27.42.509 0 .075-.015.149-.045.225-.24.569-1.273.988-3.146 1.271-.059.091-.12.375-.164.57-.029.179-.074.36-.134.553-.076.271-.27.405-.555.405h-.03c-.135 0-.313-.031-.538-.074-.36-.075-.765-.135-1.273-.135-.3 0-.599.015-.913.074-.6.104-1.123.464-1.723.884-.853.599-1.826 1.288-3.294 1.288-.06 0-.119-.015-.18-.015h-.149c-1.468 0-2.427-.675-3.279-1.288-.599-.42-1.107-.779-1.707-.884-.314-.045-.629-.074-.928-.074-.54 0-.958.089-1.272.149-.211.043-.391.074-.54.074-.374 0-.523-.224-.583-.42-.061-.192-.09-.389-.135-.567-.046-.181-.105-.494-.166-.57-1.918-.222-2.95-.642-3.189-1.226-.031-.063-.052-.15-.055-.225-.015-.243.165-.465.42-.509 3.264-.54 4.73-3.879 4.791-4.02l.016-.029c.18-.345.224-.645.119-.869-.195-.434-.884-.658-1.332-.809-.121-.029-.24-.074-.346-.119-1.107-.435-1.257-.93-1.197-1.273.09-.479.674-.793 1.168-.793.146 0 .27.029.383.074.42.194.789.3 1.104.3.234 0 .384-.06.465-.105l-.046-.569c-.098-1.626-.225-3.651.307-4.837C7.392 1.077 10.739.807 11.727.807l.419-.015h.06z"/>
       </svg>
@@ -624,45 +756,57 @@
   </div>
 </footer>
 
+<!-- تنويه -->
+<div class="disclaimer">
+  <p>
+    <strong style="color:rgba(255,255,255,.28);">تنويه</strong><br>
+    هذه المنصة أداة تثقيفية تساعد ملّاك السيارات على فهم مواصفات زيوت المحركات بطريقة مبسطة. المعلومات المعروضة مبنية على بيانات عامة من أدلة الملاك الرسمية للشركات المصنّعة. قد تختلف المواصفات أو الكميات حسب سنة التصنيع أو الفئة أو السوق، لذلك يُوصى دائماً بالرجوع إلى دليل المالك الخاص بالمركبة للتأكد من المواصفات الدقيقة. تُقدَّم هذه المعلومات لأغراض التثقيف والتوضيح، ويظل المستخدم مسؤولاً عن التأكد من المواصفات المناسبة لسيارته قبل استخدامها.
+  </p>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     JAVASCRIPT — نظيف بدون أخطاء
+══════════════════════════════════════════════════ -->
 <script>
-const cars = [
-  {id:"TOY-CAM-25",make:"toyota",make_ar:"تويوتا",model:"camry",model_ar:"كامري",year_start:2018,year_end:2025,engine:"2.5L",viscosity:"0W-20",specifications:["API SP","ILSAC GF-6"],oil_with_filter:4.8,oil_without_filter:4.5,change_interval_km:10000,severe_interval_km:6000,oil_type:"تركيبي كامل",company_advice:"يُنصح باستخدام زيت تركيبي كامل للحفاظ على أداء المحرك وتوفير الوقود."},
-  {id:"TOY-CAM-35",make:"toyota",make_ar:"تويوتا",model:"camry",model_ar:"كامري",year_start:2018,year_end:2025,engine:"3.5L V6",viscosity:"5W-30",specifications:["API SP","ILSAC GF-6"],oil_with_filter:6.4,oil_without_filter:6.0,change_interval_km:10000,severe_interval_km:6000,oil_type:"تركيبي كامل",company_advice:"محرك V6 يحتاج زيت تركيبي كامل فقط."},
-  {id:"TOY-COR-18",make:"toyota",make_ar:"تويوتا",model:"corolla",model_ar:"كورولا",year_start:2015,year_end:2025,engine:"1.8L",viscosity:"0W-20",specifications:["API SP","ILSAC GF-6"],oil_with_filter:4.4,oil_without_filter:4.1,change_interval_km:10000,severe_interval_km:5000,oil_type:"تركيبي كامل",company_advice:"استخدم زيت 0W-20 تركيبي كامل فقط."},
-  {id:"TOY-COR-20",make:"toyota",make_ar:"تويوتا",model:"corolla",model_ar:"كورولا",year_start:2018,year_end:2025,engine:"2.0L",viscosity:"0W-20",specifications:["API SP","ILSAC GF-6"],oil_with_filter:4.7,oil_without_filter:4.4,change_interval_km:10000,severe_interval_km:5000,oil_type:"تركيبي كامل",company_advice:""},
-  {id:"TOY-LC-46",make:"toyota",make_ar:"تويوتا",model:"land_cruiser",model_ar:"لاندكروزر",year_start:2016,year_end:2021,engine:"4.6L V8",viscosity:"5W-30",specifications:["API SP"],oil_with_filter:7.9,oil_without_filter:7.5,change_interval_km:10000,severe_interval_km:6000,oil_type:"تركيبي كامل",company_advice:"محرك V8 ضخم يتطلب زيت تركيبي عالي الجودة."},
-  {id:"TOY-LC-35",make:"toyota",make_ar:"تويوتا",model:"land_cruiser",model_ar:"لاندكروزر",year_start:2022,year_end:2025,engine:"3.5L Twin Turbo",viscosity:"0W-20",specifications:["API SP"],oil_with_filter:7.5,oil_without_filter:7.0,change_interval_km:10000,severe_interval_km:6000,oil_type:"تركيبي كامل",company_advice:"المحرك الجديد يستلزم 0W-20 تركيبي كامل حصراً."},
-  {id:"TOY-LC-45D",make:"toyota",make_ar:"تويوتا",model:"land_cruiser",model_ar:"لاندكروزر",year_start:2016,year_end:2021,engine:"4.5L V8 ديزل",viscosity:"5W-30",specifications:["API CJ-4"],oil_with_filter:11.0,oil_without_filter:10.5,change_interval_km:10000,severe_interval_km:6000,oil_type:"تركيبي كامل (ديزل)",company_advice:"يجب استخدام زيت ديزل معتمد API CJ-4 حصراً."},
-  {id:"TOY-HIL-27",make:"toyota",make_ar:"تويوتا",model:"hilux",model_ar:"هايلكس",year_start:2016,year_end:2025,engine:"2.7L بنزين",viscosity:"5W-30",specifications:["API SP"],oil_with_filter:5.8,oil_without_filter:5.5,change_interval_km:10000,severe_interval_km:5000,oil_type:"تركيبي",company_advice:""},
-  {id:"TOY-HIL-24D",make:"toyota",make_ar:"تويوتا",model:"hilux",model_ar:"هايلكس",year_start:2016,year_end:2025,engine:"2.4L ديزل",viscosity:"5W-30",specifications:["API CJ-4"],oil_with_filter:7.0,oil_without_filter:6.5,change_interval_km:10000,severe_interval_km:5000,oil_type:"تركيبي (ديزل)",company_advice:"يجب استخدام زيت ديزل معتمد API CJ-4."},
-  {id:"HYU-SON-24",make:"hyundai",make_ar:"هيونداي",model:"sonata",model_ar:"سوناتا",year_start:2015,year_end:2025,engine:"2.4L",viscosity:"5W-20",specifications:["API SP"],oil_with_filter:4.8,oil_without_filter:4.5,change_interval_km:9000,severe_interval_km:5000,oil_type:"شبه تركيبي",company_advice:"يُنصح باستخدام شبه تركيبي كحد أدنى."},
-  {id:"HYU-SON-20T",make:"hyundai",make_ar:"هيونداي",model:"sonata",model_ar:"سوناتا",year_start:2015,year_end:2025,engine:"2.0T توربو",viscosity:"5W-30",specifications:["API SP"],oil_with_filter:5.1,oil_without_filter:4.8,change_interval_km:9000,severe_interval_km:5000,oil_type:"تركيبي كامل",company_advice:"محرك توربو يتطلب زيت تركيبي كامل."},
-  {id:"HYU-ELA-16",make:"hyundai",make_ar:"هيونداي",model:"elantra",model_ar:"إيلانترا",year_start:2014,year_end:2025,engine:"1.6L",viscosity:"5W-30",specifications:["API SP"],oil_with_filter:3.5,oil_without_filter:3.3,change_interval_km:8000,severe_interval_km:5000,oil_type:"شبه تركيبي",company_advice:"احرص على عدم نقص الزيت لصغر حجم المحرك."},
-  {id:"HYU-ELA-20",make:"hyundai",make_ar:"هيونداي",model:"elantra",model_ar:"إيلانترا",year_start:2014,year_end:2025,engine:"2.0L",viscosity:"5W-20",specifications:["API SP"],oil_with_filter:4.2,oil_without_filter:4.0,change_interval_km:8000,severe_interval_km:5000,oil_type:"شبه تركيبي",company_advice:""},
-  {id:"HYU-SF-20T",make:"hyundai",make_ar:"هيونداي",model:"santa_fe",model_ar:"سانتافي",year_start:2016,year_end:2025,engine:"2.0T توربو",viscosity:"5W-30",specifications:["API SP"],oil_with_filter:5.1,oil_without_filter:4.8,change_interval_km:9000,severe_interval_km:5000,oil_type:"تركيبي كامل",company_advice:"محرك توربو يتطلب زيت تركيبي كامل."},
-  {id:"KIA-K5-20",make:"kia",make_ar:"كيا",model:"k5",model_ar:"K5",year_start:2016,year_end:2025,engine:"2.0L",viscosity:"5W-20",specifications:["API SP"],oil_with_filter:4.2,oil_without_filter:4.0,change_interval_km:8000,severe_interval_km:5000,oil_type:"شبه تركيبي",company_advice:""},
-  {id:"KIA-K5-20T",make:"kia",make_ar:"كيا",model:"k5",model_ar:"K5",year_start:2016,year_end:2025,engine:"2.0T توربو",viscosity:"5W-30",specifications:["API SP"],oil_with_filter:5.0,oil_without_filter:4.7,change_interval_km:8000,severe_interval_km:5000,oil_type:"تركيبي كامل",company_advice:"توربو = تركيبي كامل إلزامي."},
-  {id:"KIA-SPO-20",make:"kia",make_ar:"كيا",model:"sportage",model_ar:"سبورتاج",year_start:2016,year_end:2025,engine:"2.0L",viscosity:"5W-20",specifications:["API SP"],oil_with_filter:4.2,oil_without_filter:4.0,change_interval_km:8000,severe_interval_km:5000,oil_type:"شبه تركيبي",company_advice:""},
-  {id:"KIA-SPO-16T",make:"kia",make_ar:"كيا",model:"sportage",model_ar:"سبورتاج",year_start:2016,year_end:2025,engine:"1.6T توربو",viscosity:"5W-30",specifications:["API SP"],oil_with_filter:4.5,oil_without_filter:4.2,change_interval_km:8000,severe_interval_km:5000,oil_type:"تركيبي كامل",company_advice:""},
-  {id:"NIS-PAT-56",make:"nissan",make_ar:"نيسان",model:"patrol",model_ar:"باترول",year_start:2014,year_end:2025,engine:"5.6L V8",viscosity:"5W-30",specifications:["API SP"],oil_with_filter:7.4,oil_without_filter:7.0,change_interval_km:10000,severe_interval_km:5000,oil_type:"تركيبي كامل",company_advice:"محرك V8 كبير — التركيبي الكامل إلزامي."},
-  {id:"NIS-PAT-40",make:"nissan",make_ar:"نيسان",model:"patrol",model_ar:"باترول",year_start:2014,year_end:2025,engine:"4.0L V6",viscosity:"5W-30",specifications:["API SP"],oil_with_filter:6.1,oil_without_filter:5.8,change_interval_km:10000,severe_interval_km:5000,oil_type:"تركيبي كامل",company_advice:""},
-  {id:"NIS-ALT-25",make:"nissan",make_ar:"نيسان",model:"altima",model_ar:"ألتيما",year_start:2013,year_end:2025,engine:"2.5L",viscosity:"5W-30",specifications:["API SP"],oil_with_filter:4.4,oil_without_filter:4.1,change_interval_km:8000,severe_interval_km:5000,oil_type:"شبه تركيبي",company_advice:""},
-  {id:"HON-ACC-15T",make:"honda",make_ar:"هوندا",model:"accord",model_ar:"أكورد",year_start:2018,year_end:2025,engine:"1.5T توربو",viscosity:"0W-20",specifications:["API SP","ILSAC GF-6"],oil_with_filter:3.7,oil_without_filter:3.5,change_interval_km:10000,severe_interval_km:6000,oil_type:"تركيبي كامل",company_advice:"هوندا توصي بـ 0W-20 تركيبي كامل حصراً."},
-  {id:"HON-CIV-15T",make:"honda",make_ar:"هوندا",model:"civic",model_ar:"سيفيك",year_start:2016,year_end:2025,engine:"1.5T توربو",viscosity:"0W-20",specifications:["API SP","ILSAC GF-6"],oil_with_filter:3.7,oil_without_filter:3.5,change_interval_km:10000,severe_interval_km:5000,oil_type:"تركيبي كامل",company_advice:"0W-20 تركيبي كامل إلزامي لهذا المحرك."},
-  {id:"HON-CIV-20",make:"honda",make_ar:"هوندا",model:"civic",model_ar:"سيفيك",year_start:2016,year_end:2025,engine:"2.0L",viscosity:"0W-20",specifications:["API SP","ILSAC GF-6"],oil_with_filter:3.9,oil_without_filter:3.6,change_interval_km:10000,severe_interval_km:5000,oil_type:"تركيبي كامل",company_advice:""},
-  {id:"GMC-YUK-53",make:"gmc",make_ar:"GMC",model:"yukon",model_ar:"يوكون",year_start:2015,year_end:2025,engine:"5.3L V8",viscosity:"5W-30",specifications:["GM dexos1 Gen3"],oil_with_filter:8.0,oil_without_filter:7.6,change_interval_km:12000,severe_interval_km:6000,oil_type:"تركيبي كامل dexos",company_advice:"يجب استخدام زيت معتمد GM dexos1 Gen3 حصراً."},
-  {id:"GMC-YUK-62",make:"gmc",make_ar:"GMC",model:"yukon",model_ar:"يوكون",year_start:2019,year_end:2025,engine:"6.2L V8",viscosity:"0W-20",specifications:["GM dexos1 Gen3"],oil_with_filter:8.0,oil_without_filter:7.6,change_interval_km:12000,severe_interval_km:6000,oil_type:"تركيبي كامل dexos",company_advice:"يجب استخدام زيت معتمد GM dexos1 Gen3."},
-  {id:"FOR-EXP-23",make:"ford",make_ar:"فورد",model:"explorer",model_ar:"إكسبلورر",year_start:2014,year_end:2025,engine:"2.3L EcoBoost",viscosity:"5W-30",specifications:["Ford WSS-M2C946-B1"],oil_with_filter:6.0,oil_without_filter:5.7,change_interval_km:10000,severe_interval_km:5000,oil_type:"تركيبي كامل",company_advice:"يجب أن يحمل الزيت مواصفة Ford WSS-M2C946-B1."},
-  {id:"FOR-F15-35",make:"ford",make_ar:"فورد",model:"f150",model_ar:"F-150",year_start:2015,year_end:2025,engine:"3.5L EcoBoost",viscosity:"5W-30",specifications:["Ford WSS-M2C946-B1"],oil_with_filter:6.0,oil_without_filter:5.7,change_interval_km:10000,severe_interval_km:5000,oil_type:"تركيبي كامل",company_advice:"توربو EcoBoost يتطلب مواصفة فورد الخاصة."},
-  {id:"CHE-SUB-53",make:"chevrolet",make_ar:"شيفروليه",model:"suburban",model_ar:"سوبربان",year_start:2015,year_end:2025,engine:"5.3L V8",viscosity:"5W-30",specifications:["GM dexos1 Gen3"],oil_with_filter:8.0,oil_without_filter:7.6,change_interval_km:12000,severe_interval_km:6000,oil_type:"تركيبي كامل dexos",company_advice:"يجب استخدام زيت معتمد GM dexos1 Gen3."},
-  {id:"CHE-MAL-15T",make:"chevrolet",make_ar:"شيفروليه",model:"malibu",model_ar:"ماليبو",year_start:2016,year_end:2025,engine:"1.5T توربو",viscosity:"5W-30",specifications:["GM dexos1 Gen3"],oil_with_filter:4.6,oil_without_filter:4.3,change_interval_km:10000,severe_interval_km:5000,oil_type:"تركيبي كامل dexos",company_advice:"توربو يتطلب زيت dexos معتمد."},
-  {id:"BMW-X5-30",make:"bmw",make_ar:"BMW",model:"x5",model_ar:"X5",year_start:2014,year_end:2025,engine:"3.0L توربو",viscosity:"0W-30",specifications:["BMW LL-04"],oil_with_filter:6.5,oil_without_filter:6.0,change_interval_km:24000,severe_interval_km:12000,oil_type:"تركيبي كامل Longlife",company_advice:"يجب أن يحمل الزيت اعتماد BMW LL-04 صريحاً — لا تكفي الدرجة وحدها."},
-  {id:"BMW-3SR-20",make:"bmw",make_ar:"BMW",model:"series3",model_ar:"الفئة الثالثة",year_start:2012,year_end:2025,engine:"2.0L توربو",viscosity:"0W-30",specifications:["BMW LL-04"],oil_with_filter:5.4,oil_without_filter:5.0,change_interval_km:24000,severe_interval_km:12000,oil_type:"تركيبي كامل Longlife",company_advice:"BMW LL-04 إلزامي — الزيت غير المعتمد يتلف المحرك على المدى البعيد."},
-  {id:"MER-E-20",make:"mercedes",make_ar:"مرسيدس",model:"e_class",model_ar:"الفئة E",year_start:2014,year_end:2025,engine:"2.0T توربو",viscosity:"5W-30",specifications:["MB 229.5"],oil_with_filter:7.0,oil_without_filter:6.5,change_interval_km:15000,severe_interval_km:8000,oil_type:"تركيبي كامل MB-Approved",company_advice:"يجب أن يحمل الزيت اعتماد MB 229.5 — الزيت بدونه يضر بالمحرك."},
-  {id:"MER-S-30",make:"mercedes",make_ar:"مرسيدس",model:"s_class",model_ar:"الفئة S",year_start:2014,year_end:2025,engine:"3.0T توربو",viscosity:"0W-40",specifications:["MB 229.51"],oil_with_filter:8.5,oil_without_filter:8.0,change_interval_km:15000,severe_interval_km:8000,oil_type:"تركيبي كامل MB-Approved",company_advice:"MB 229.51 إلزامي لمحركات الفئة S."}
+/* ══ قاعدة البيانات ══════════════════════════════ */
+const cars=[
+  {id:"TOY-CAM-25",make:"toyota",make_ar:"تويوتا",model:"camry",model_ar:"كامري",year_start:2018,year_end:2025,engine:"2.5L",viscosity:"0W-20",specifications:["API SP","ILSAC GF-6"],oil_with_filter:4.8,oil_without_filter:4.5,change_interval_km:10000,severe_interval_km:6000,oil_type:"تخليقي كامل",company_advice:"يُنصح باستخدام زيت تخليقي كامل للحفاظ على أداء المحرك وتوفير الوقود."},
+  {id:"TOY-CAM-35",make:"toyota",make_ar:"تويوتا",model:"camry",model_ar:"كامري",year_start:2018,year_end:2025,engine:"3.5L V6",viscosity:"5W-30",specifications:["API SP","ILSAC GF-6"],oil_with_filter:6.4,oil_without_filter:6.0,change_interval_km:10000,severe_interval_km:6000,oil_type:"تخليقي كامل",company_advice:"محرك V6 يحتاج زيت تخليقي كامل فقط."},
+  {id:"TOY-COR-18",make:"toyota",make_ar:"تويوتا",model:"corolla",model_ar:"كورولا",year_start:2015,year_end:2025,engine:"1.8L",viscosity:"0W-20",specifications:["API SP","ILSAC GF-6"],oil_with_filter:4.4,oil_without_filter:4.1,change_interval_km:10000,severe_interval_km:5000,oil_type:"تخليقي كامل",company_advice:""},
+  {id:"TOY-COR-20",make:"toyota",make_ar:"تويوتا",model:"corolla",model_ar:"كورولا",year_start:2018,year_end:2025,engine:"2.0L",viscosity:"0W-20",specifications:["API SP","ILSAC GF-6"],oil_with_filter:4.7,oil_without_filter:4.4,change_interval_km:10000,severe_interval_km:5000,oil_type:"تخليقي كامل",company_advice:""},
+  {id:"TOY-LC-46",make:"toyota",make_ar:"تويوتا",model:"land_cruiser",model_ar:"لاندكروزر",year_start:2016,year_end:2021,engine:"4.6L V8",viscosity:"5W-30",specifications:["API SP"],oil_with_filter:7.9,oil_without_filter:7.5,change_interval_km:10000,severe_interval_km:6000,oil_type:"تخليقي كامل",company_advice:"محرك V8 ضخم يتطلب زيت تخليقي عالي الجودة."},
+  {id:"TOY-LC-35",make:"toyota",make_ar:"تويوتا",model:"land_cruiser",model_ar:"لاندكروزر",year_start:2022,year_end:2025,engine:"3.5L Twin Turbo",viscosity:"0W-20",specifications:["API SP"],oil_with_filter:7.5,oil_without_filter:7.0,change_interval_km:10000,severe_interval_km:6000,oil_type:"تخليقي كامل",company_advice:"المحرك الجديد يستلزم 0W-20 تركيبي كامل حصراً."},
+  {id:"TOY-LC-45D",make:"toyota",make_ar:"تويوتا",model:"land_cruiser",model_ar:"لاندكروزر",year_start:2016,year_end:2021,engine:"4.5L V8 ديزل",viscosity:"5W-30",specifications:["API CJ-4"],oil_with_filter:11.0,oil_without_filter:10.5,change_interval_km:10000,severe_interval_km:6000,oil_type:"تخليقي كامل (ديزل)",company_advice:"يجب استخدام زيت ديزل معتمد API CJ-4 حصراً."},
+  {id:"TOY-HIL-27",make:"toyota",make_ar:"تويوتا",model:"hilux",model_ar:"هايلكس",year_start:2016,year_end:2025,engine:"2.7L بنزين",viscosity:"5W-30",specifications:["API SP"],oil_with_filter:5.8,oil_without_filter:5.5,change_interval_km:10000,severe_interval_km:5000,oil_type:"تخليقي",company_advice:""},
+  {id:"TOY-HIL-24D",make:"toyota",make_ar:"تويوتا",model:"hilux",model_ar:"هايلكس",year_start:2016,year_end:2025,engine:"2.4L ديزل",viscosity:"5W-30",specifications:["API CJ-4"],oil_with_filter:7.0,oil_without_filter:6.5,change_interval_km:10000,severe_interval_km:5000,oil_type:"تخليقي (ديزل)",company_advice:"يجب استخدام زيت ديزل معتمد API CJ-4."},
+  {id:"HYU-SON-24",make:"hyundai",make_ar:"هيونداي",model:"sonata",model_ar:"سوناتا",year_start:2015,year_end:2025,engine:"2.4L",viscosity:"5W-20",specifications:["API SP"],oil_with_filter:4.8,oil_without_filter:4.5,change_interval_km:9000,severe_interval_km:5000,oil_type:"نص تخليقي",company_advice:"يُنصح باستخدام نص تخليقي كحد أدنى."},
+  {id:"HYU-SON-20T",make:"hyundai",make_ar:"هيونداي",model:"sonata",model_ar:"سوناتا",year_start:2015,year_end:2025,engine:"2.0T توربو",viscosity:"5W-30",specifications:["API SP"],oil_with_filter:5.1,oil_without_filter:4.8,change_interval_km:9000,severe_interval_km:5000,oil_type:"تخليقي كامل",company_advice:"محرك توربو يتطلب زيت تخليقي كامل."},
+  {id:"HYU-ELA-16",make:"hyundai",make_ar:"هيونداي",model:"elantra",model_ar:"إيلانترا",year_start:2014,year_end:2025,engine:"1.6L",viscosity:"5W-30",specifications:["API SP"],oil_with_filter:3.5,oil_without_filter:3.3,change_interval_km:8000,severe_interval_km:5000,oil_type:"نص تخليقي",company_advice:"احرص على عدم نقص الزيت لصغر حجم المحرك."},
+  {id:"HYU-ELA-20",make:"hyundai",make_ar:"هيونداي",model:"elantra",model_ar:"إيلانترا",year_start:2014,year_end:2025,engine:"2.0L",viscosity:"5W-20",specifications:["API SP"],oil_with_filter:4.2,oil_without_filter:4.0,change_interval_km:8000,severe_interval_km:5000,oil_type:"نص تخليقي",company_advice:""},
+  {id:"HYU-SF-20T",make:"hyundai",make_ar:"هيونداي",model:"santa_fe",model_ar:"سانتافي",year_start:2016,year_end:2025,engine:"2.0T توربو",viscosity:"5W-30",specifications:["API SP"],oil_with_filter:5.1,oil_without_filter:4.8,change_interval_km:9000,severe_interval_km:5000,oil_type:"تخليقي كامل",company_advice:"محرك توربو يتطلب زيت تخليقي كامل."},
+  {id:"KIA-K5-20",make:"kia",make_ar:"كيا",model:"k5",model_ar:"K5",year_start:2016,year_end:2025,engine:"2.0L",viscosity:"5W-20",specifications:["API SP"],oil_with_filter:4.2,oil_without_filter:4.0,change_interval_km:8000,severe_interval_km:5000,oil_type:"نص تخليقي",company_advice:""},
+  {id:"KIA-K5-20T",make:"kia",make_ar:"كيا",model:"k5",model_ar:"K5",year_start:2016,year_end:2025,engine:"2.0T توربو",viscosity:"5W-30",specifications:["API SP"],oil_with_filter:5.0,oil_without_filter:4.7,change_interval_km:8000,severe_interval_km:5000,oil_type:"تخليقي كامل",company_advice:"توربو = تركيبي كامل إلزامي."},
+  {id:"KIA-SPO-20",make:"kia",make_ar:"كيا",model:"sportage",model_ar:"سبورتاج",year_start:2016,year_end:2025,engine:"2.0L",viscosity:"5W-20",specifications:["API SP"],oil_with_filter:4.2,oil_without_filter:4.0,change_interval_km:8000,severe_interval_km:5000,oil_type:"نص تخليقي",company_advice:""},
+  {id:"KIA-SPO-16T",make:"kia",make_ar:"كيا",model:"sportage",model_ar:"سبورتاج",year_start:2016,year_end:2025,engine:"1.6T توربو",viscosity:"5W-30",specifications:["API SP"],oil_with_filter:4.5,oil_without_filter:4.2,change_interval_km:8000,severe_interval_km:5000,oil_type:"تخليقي كامل",company_advice:""},
+  {id:"NIS-PAT-56",make:"nissan",make_ar:"نيسان",model:"patrol",model_ar:"باترول",year_start:2014,year_end:2025,engine:"5.6L V8",viscosity:"5W-30",specifications:["API SP"],oil_with_filter:7.4,oil_without_filter:7.0,change_interval_km:10000,severe_interval_km:5000,oil_type:"تخليقي كامل",company_advice:"محرك V8 كبير — التركيبي الكامل إلزامي."},
+  {id:"NIS-PAT-40",make:"nissan",make_ar:"نيسان",model:"patrol",model_ar:"باترول",year_start:2014,year_end:2025,engine:"4.0L V6",viscosity:"5W-30",specifications:["API SP"],oil_with_filter:6.1,oil_without_filter:5.8,change_interval_km:10000,severe_interval_km:5000,oil_type:"تخليقي كامل",company_advice:""},
+  {id:"NIS-ALT-25",make:"nissan",make_ar:"نيسان",model:"altima",model_ar:"ألتيما",year_start:2013,year_end:2025,engine:"2.5L",viscosity:"5W-30",specifications:["API SP"],oil_with_filter:4.4,oil_without_filter:4.1,change_interval_km:8000,severe_interval_km:5000,oil_type:"نص تخليقي",company_advice:""},
+  {id:"HON-ACC-15T",make:"honda",make_ar:"هوندا",model:"accord",model_ar:"أكورد",year_start:2018,year_end:2025,engine:"1.5T توربو",viscosity:"0W-20",specifications:["API SP","ILSAC GF-6"],oil_with_filter:3.7,oil_without_filter:3.5,change_interval_km:10000,severe_interval_km:6000,oil_type:"تخليقي كامل",company_advice:"هوندا توصي بـ 0W-20 تركيبي كامل حصراً."},
+  {id:"HON-CIV-15T",make:"honda",make_ar:"هوندا",model:"civic",model_ar:"سيفيك",year_start:2016,year_end:2025,engine:"1.5T توربو",viscosity:"0W-20",specifications:["API SP","ILSAC GF-6"],oil_with_filter:3.7,oil_without_filter:3.5,change_interval_km:10000,severe_interval_km:5000,oil_type:"تخليقي كامل",company_advice:"0W-20 تركيبي كامل إلزامي لهذا المحرك."},
+  {id:"HON-CIV-20",make:"honda",make_ar:"هوندا",model:"civic",model_ar:"سيفيك",year_start:2016,year_end:2025,engine:"2.0L",viscosity:"0W-20",specifications:["API SP","ILSAC GF-6"],oil_with_filter:3.9,oil_without_filter:3.6,change_interval_km:10000,severe_interval_km:5000,oil_type:"تخليقي كامل",company_advice:""},
+  {id:"GMC-YUK-53",make:"gmc",make_ar:"GMC",model:"yukon",model_ar:"يوكون",year_start:2015,year_end:2025,engine:"5.3L V8",viscosity:"5W-30",specifications:["GM dexos1 Gen3"],oil_with_filter:8.0,oil_without_filter:7.6,change_interval_km:12000,severe_interval_km:6000,oil_type:"تخليقي كامل dexos",company_advice:"يجب استخدام زيت معتمد GM dexos1 Gen3 حصراً."},
+  {id:"GMC-YUK-62",make:"gmc",make_ar:"GMC",model:"yukon",model_ar:"يوكون",year_start:2019,year_end:2025,engine:"6.2L V8",viscosity:"0W-20",specifications:["GM dexos1 Gen3"],oil_with_filter:8.0,oil_without_filter:7.6,change_interval_km:12000,severe_interval_km:6000,oil_type:"تخليقي كامل dexos",company_advice:"يجب استخدام زيت معتمد GM dexos1 Gen3."},
+  {id:"FOR-EXP-23",make:"ford",make_ar:"فورد",model:"explorer",model_ar:"إكسبلورر",year_start:2014,year_end:2025,engine:"2.3L EcoBoost",viscosity:"5W-30",specifications:["Ford WSS-M2C946-B1"],oil_with_filter:6.0,oil_without_filter:5.7,change_interval_km:10000,severe_interval_km:5000,oil_type:"تخليقي كامل",company_advice:"يجب أن يحمل الزيت مواصفة Ford WSS-M2C946-B1."},
+  {id:"FOR-F15-35",make:"ford",make_ar:"فورد",model:"f150",model_ar:"F-150",year_start:2015,year_end:2025,engine:"3.5L EcoBoost",viscosity:"5W-30",specifications:["Ford WSS-M2C946-B1"],oil_with_filter:6.0,oil_without_filter:5.7,change_interval_km:10000,severe_interval_km:5000,oil_type:"تخليقي كامل",company_advice:"توربو EcoBoost يتطلب مواصفة فورد الخاصة."},
+  {id:"CHE-SUB-53",make:"chevrolet",make_ar:"شيفروليه",model:"suburban",model_ar:"سوبربان",year_start:2015,year_end:2025,engine:"5.3L V8",viscosity:"5W-30",specifications:["GM dexos1 Gen3"],oil_with_filter:8.0,oil_without_filter:7.6,change_interval_km:12000,severe_interval_km:6000,oil_type:"تخليقي كامل dexos",company_advice:"يجب استخدام زيت معتمد GM dexos1 Gen3."},
+  {id:"CHE-MAL-15T",make:"chevrolet",make_ar:"شيفروليه",model:"malibu",model_ar:"ماليبو",year_start:2016,year_end:2025,engine:"1.5T توربو",viscosity:"5W-30",specifications:["GM dexos1 Gen3"],oil_with_filter:4.6,oil_without_filter:4.3,change_interval_km:10000,severe_interval_km:5000,oil_type:"تخليقي كامل dexos",company_advice:"توربو يتطلب زيت dexos معتمد."},
+  {id:"BMW-X5-30",make:"bmw",make_ar:"BMW",model:"x5",model_ar:"X5",year_start:2014,year_end:2025,engine:"3.0L توربو",viscosity:"0W-30",specifications:["BMW LL-04"],oil_with_filter:6.5,oil_without_filter:6.0,change_interval_km:24000,severe_interval_km:12000,oil_type:"تخليقي كامل Longlife",company_advice:"يجب أن يحمل الزيت اعتماد BMW LL-04 صريحاً — لا تكفي الدرجة وحدها."},
+  {id:"BMW-3SR-20",make:"bmw",make_ar:"BMW",model:"series3",model_ar:"الفئة الثالثة",year_start:2012,year_end:2025,engine:"2.0L توربو",viscosity:"0W-30",specifications:["BMW LL-04"],oil_with_filter:5.4,oil_without_filter:5.0,change_interval_km:24000,severe_interval_km:12000,oil_type:"تخليقي كامل Longlife",company_advice:"BMW LL-04 إلزامي — الزيت غير المعتمد يتلف المحرك على المدى البعيد."},
+  {id:"MER-E-20",make:"mercedes",make_ar:"مرسيدس",model:"e_class",model_ar:"الفئة E",year_start:2014,year_end:2025,engine:"2.0T توربو",viscosity:"5W-30",specifications:["MB 229.5"],oil_with_filter:7.0,oil_without_filter:6.5,change_interval_km:15000,severe_interval_km:8000,oil_type:"تخليقي كامل MB-Approved",company_advice:"يجب أن يحمل الزيت اعتماد MB 229.5 — الزيت بدونه يضر بالمحرك."},
+  {id:"MER-S-30",make:"mercedes",make_ar:"مرسيدس",model:"s_class",model_ar:"الفئة S",year_start:2014,year_end:2025,engine:"3.0T توربو",viscosity:"0W-40",specifications:["MB 229.51"],oil_with_filter:8.5,oil_without_filter:8.0,change_interval_km:15000,severe_interval_km:8000,oil_type:"تخليقي كامل MB-Approved",company_advice:"MB 229.51 إلزامي لمحركات الفئة S."}
 ];
 
-const OIL_PLAIN = {
+const OIL_PLAIN={
   "0W-20":"الزيت الأخف على الإطلاق — يوصل للمحرك في جزء من الثانية لحظة التشغيل. يوفّر بنزين ويحمي المحرك الحديث.",
   "5W-20":"زيت خفيف ومتوازن — مناسب للمحركات الأمريكية والكورية. أداء ممتاز في الحرارة.",
   "5W-30":"الأكثر انتشاراً عالمياً — يناسب معظم السيارات. خفيف في البرد وثابت في الحر.",
@@ -671,39 +815,7 @@ const OIL_PLAIN = {
   "0W-40":"أقوى زيوت مرسيدس — خفيف وقت التشغيل البارد وسميك جداً وقت الحر."
 };
 
-function getModels(brand){const ms={};cars.filter(c=>c.make===brand).forEach(c=>{ms[c.model]=c.model_ar;});return ms;}
-function getYears(brand,model){const y=new Set();cars.filter(c=>c.make===brand&&c.model===model).forEach(c=>{for(let i=c.year_start;i<=c.year_end;i++)y.add(i);});return[...y].sort((a,b)=>b-a);}
-function getEngines(brand,model,year){return cars.filter(c=>c.make===brand&&c.model===model&&year>=c.year_start&&year<=c.year_end);}
-
-function updateModels(){
-  const b=document.getElementById('brand').value,m=document.getElementById('model');
-  m.innerHTML='<option value="">— اختر الموديل —</option>';m.disabled=!b;reset();
-  if(!b)return;
-  if(b==='other'){
-    const vinBox=document.getElementById('vin-where');
-    if(vinBox) vinBox.scrollIntoView({behavior:'smooth',block:'center'});
-    return;
-  }
-  Object.entries(getModels(b)).forEach(([k,v])=>{const o=document.createElement('option');o.value=k;o.text=v;m.appendChild(o);});
-}
-function updateYears(){
-  const b=document.getElementById('brand').value,md=document.getElementById('model').value,y=document.getElementById('year');
-  y.innerHTML='<option value="">— اختر السنة —</option>';y.disabled=!md;reset2();
-  if(!md)return;
-  getYears(b,md).forEach(yr=>{const o=document.createElement('option');o.value=yr;o.text=yr;y.appendChild(o);});
-}
-function updateEngines(){
-  const b=document.getElementById('brand').value,md=document.getElementById('model').value,yr=parseInt(document.getElementById('year').value),e=document.getElementById('engine');
-  e.innerHTML='<option value="">— اختر المحرك —</option>';e.disabled=!yr;
-  document.getElementById('result').style.display='none';
-  if(!yr)return;
-  getEngines(b,md,yr).forEach(c=>{const o=document.createElement('option');o.value=c.id;o.text=c.engine;e.appendChild(o);});
-}
-function reset(){document.getElementById('year').innerHTML='<option value="">— اختر السنة —</option>';document.getElementById('year').disabled=true;reset2();}
-function reset2(){document.getElementById('engine').innerHTML='<option value="">— اختر المحرك —</option>';document.getElementById('engine').disabled=true;document.getElementById('result').style.display='none';}
-
-/* شرح درجة اللزوجة بالعامي */
-const VISCO_MEANING = {
+const VISCO_MEANING={
   "0W-20":"خفيف جداً — يحمي المحرك من أول لحظة تشغيل",
   "5W-20":"خفيف ومتوازن — مناسب للمحركات الأمريكية والكورية",
   "5W-30":"متوسط — الأكثر شيوعاً، يناسب أغلب السيارات",
@@ -711,132 +823,157 @@ const VISCO_MEANING = {
   "5W-40":"ثقيل نسبياً — للمحركات الأوروبية والأداء العالي",
   "0W-40":"خفيف في البرد، ثقيل في الحر — خاص بمرسيدس الفئة العالية"
 };
-/* شرح المعيار بالعامي */
-const STD_MEANING = {
-  "API SP":    "شهادة جودة أمريكية — أعلى معيار حالياً",
+
+const STD_MEANING={
+  "API SP":"شهادة جودة أمريكية — أعلى معيار حالياً",
   "ILSAC GF-6":"معيار توفير الوقود — يعني الزيت يوفّر بنزين",
-  "API CJ-4":  "معيار خاص بمحركات الديزل",
+  "API CJ-4":"معيار خاص بمحركات الديزل",
   "GM dexos1 Gen3":"معتمد من GM — لازم يكون مكتوب على العلبة",
   "Ford WSS-M2C946-B1":"معتمد من فورد — لازم يكون مكتوب على العلبة",
-  "BMW LL-04": "اعتماد BMW — بدونه الضمان ملغي",
-  "MB 229.5":  "اعتماد مرسيدس — لازم يكون مكتوب صريح على العلبة",
-  "MB 229.51": "اعتماد مرسيدس العالي — للفئة S وما فوق"
+  "BMW LL-04":"اعتماد BMW — بدونه الضمان ملغي",
+  "MB 229.5":"اعتماد مرسيدس — لازم يكون مكتوب صريح على العلبة",
+  "MB 229.51":"اعتماد مرسيدس العالي — للفئة S وما فوق"
 };
 
+/* ══ helpers ═══════════════════════════════════ */
+function getModels(b){const m={};cars.filter(c=>c.make===b).forEach(c=>{m[c.model]=c.model_ar;});return m;}
+function getYears(b,md){const y=new Set();cars.filter(c=>c.make===b&&c.model===md).forEach(c=>{for(let i=c.year_start;i<=c.year_end;i++)y.add(i);});return[...y].sort((a,z)=>z-a);}
+function getEngines(b,md,yr){return cars.filter(c=>c.make===b&&c.model===md&&yr>=c.year_start&&yr<=c.year_end);}
+function $(id){return document.getElementById(id);}
+
+/* ══ dropdowns ═════════════════════════════════ */
+function updateModels(){
+  const b=$('brand').value, m=$('model');
+  m.innerHTML='<option value="">— اختر الموديل —</option>';
+  m.disabled=!b; resetYear();
+  if(!b)return;
+  if(b==='other'){
+    $('vin-where').scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  Object.entries(getModels(b)).forEach(([k,v])=>{
+    const o=document.createElement('option');o.value=k;o.text=v;m.appendChild(o);
+  });
+}
+function updateYears(){
+  const b=$('brand').value,md=$('model').value,y=$('year');
+  y.innerHTML='<option value="">— اختر السنة —</option>';y.disabled=!md;resetEngine();
+  if(!md)return;
+  getYears(b,md).forEach(yr=>{const o=document.createElement('option');o.value=yr;o.text=yr;y.appendChild(o);});
+}
+function updateEngines(){
+  const b=$('brand').value,md=$('model').value,yr=parseInt($('year').value),e=$('engine');
+  e.innerHTML='<option value="">— اختر المحرك —</option>';e.disabled=!yr;
+  $('result').style.display='none';
+  if(!yr)return;
+  getEngines(b,md,yr).forEach(c=>{const o=document.createElement('option');o.value=c.id;o.text=c.engine;e.appendChild(o);});
+}
+function resetYear(){$('year').innerHTML='<option value="">— اختر السنة —</option>';$('year').disabled=true;resetEngine();}
+function resetEngine(){$('engine').innerHTML='<option value="">— اختر المحرك —</option>';$('engine').disabled=true;$('result').style.display='none';}
+
+/* ══ analyze ═══════════════════════════════════ */
 function analyze(){
-  const eid=document.getElementById('engine').value;
+  const eid=$('engine').value;
   if(!eid){alert('اختر المحرك أولاً');return;}
   const c=cars.find(x=>x.id===eid);if(!c)return;
-  const sev=document.getElementById('driving').value==='severe';
+  const sev=$('driving').value==='severe';
   const itv=sev?c.severe_interval_km:c.change_interval_km;
 
-  /* الاسم */
-  document.getElementById('res-car-name').textContent=c.make_ar+' '+c.model_ar+' — '+c.engine;
+  $('res-car-name').textContent=c.make_ar+' '+c.model_ar+' — '+c.engine;
+  $('res-viscosity').textContent=c.viscosity;
+  $('res-visco-meaning').textContent=VISCO_MEANING[c.viscosity]||'زيت عالي الجودة مناسب لهذا المحرك';
+  $('res-type-badge').textContent='النوع: '+c.oil_type;
+  $('res-std-badge').textContent='الشهادة: '+c.specifications.map(s=>STD_MEANING[s]||s).join(' • ');
+  $('res-qty-filter').textContent=c.oil_with_filter;
+  $('res-qty-no').textContent=c.oil_without_filter;
+  $('res-interval').textContent=itv.toLocaleString('ar-SA');
 
-  /* درجة اللزوجة + معناها */
-  document.getElementById('res-viscosity').textContent=c.viscosity;
-  document.getElementById('res-visco-meaning').textContent=VISCO_MEANING[c.viscosity]||'زيت عالي الجودة مناسب لهذا المحرك';
-
-  /* نوع الزيت والمعيار */
-  document.getElementById('res-type-badge').textContent='النوع: '+c.oil_type;
-  const stdExplain = c.specifications.map(s=>STD_MEANING[s]||s).join(' • ');
-  document.getElementById('res-std-badge').textContent='الشهادة: '+stdExplain;
-
-  /* الأرقام */
-  document.getElementById('res-qty-filter').textContent=c.oil_with_filter;
-  document.getElementById('res-qty-no').textContent=c.oil_without_filter;
-  document.getElementById('res-interval').textContent=itv.toLocaleString('ar-SA');
-
-  /* تحذير */
-  document.getElementById('res-warning').textContent=sev
+  $('res-warning').textContent=sev
     ?'⚠️ قيادتك في ظروف شاقة — تم تقليص فترة التغيير إلى '+c.severe_interval_km.toLocaleString('ar-SA')+' كم. الزحام والغبار والحرارة في السعودية تؤثر على الزيت مباشرة.'
     :'⚠️ لا تتجاوز الكمية المحددة أبداً — الزيادة تسبب رغوة وتلف البكام تماماً كالنقصان.';
 
-  /* نصيحة */
   let tip='💡 ';
-  if(c.make==='bmw')tip+='هذه السيارة تشترط كتابة اعتماد '+c.specifications[0]+' على علبة الزيت — لا تكفي الدرجة وحدها. الزيت بدون هذا الاعتماد قد يلغي الضمان ويضر المحرك.';
+  if(c.make==='bmw')tip+='هذه السيارة تشترط اعتماد '+c.specifications[0]+' مكتوب صريح على علبة الزيت — لا تكفي الدرجة وحدها. الزيت بدون هذا الاعتماد قد يلغي الضمان.';
   else if(c.make==='mercedes')tip+='مرسيدس تشترط اعتماد '+c.specifications[0]+' مكتوب صريح على العلبة — الزيت بدونه يتلف المحرك على المدى البعيد.';
-  else if(c.viscosity==='0W-20')tip+='لا تبدّل 0W-20 لزيت أثقل لأنه "يحمي أكثر" — الزيت الأثقل من اللازم يتعب مضخة الزيت ويزيد استهلاك البنزين. ثق بتوصية المصنع.';
+  else if(c.viscosity==='0W-20')tip+='لا تبدّل 0W-20 لزيت أثقل لأنه "يحمي أكثر" — الأثقل من اللازم يتعب مضخة الزيت ويزيد استهلاك البنزين. ثق بتوصية المصنع.';
   else if(c.company_advice)tip+=c.company_advice;
   else tip+='تأكد أن على علبة الزيت شهادة '+c.specifications[0]+' — الدرجة الصح بشهادة خاطئة تضر بدل ما تنفع.';
-  document.getElementById('res-tip').textContent=tip;
+  $('res-tip').textContent=tip;
 
-  /* الترجمة البسيطة */
-  const plain=OIL_PLAIN[c.viscosity]||'زيت تركيبي عالي الجودة مناسب لهذا المحرك.';
-  document.getElementById('res-plain').innerHTML=
+  const plain=OIL_PLAIN[c.viscosity]||'زيت تخليقي عالي الجودة مناسب لهذا المحرك.';
+  $('res-plain').innerHTML=
     '<strong style="color:var(--accent)">'+c.viscosity+'</strong> يعني: '+plain+
-    '<br><br>'+
-    '<strong style="color:var(--text)">الكمية الصح:</strong> '+c.oil_with_filter+' لتر مع تغيير الفلتر، أو '+c.oil_without_filter+' لتر بدون فلتر. لا تزيد ولا تنقص.'+
-    '<br><br>'+
-    '<strong style="color:var(--text)">الشهادة المطلوبة:</strong> '+c.specifications.map(s=>'<span style="color:var(--accent)">'+s+'</span> ('+( STD_MEANING[s]||s)+')').join(' و ')+'.'
-  ;
+    '<br><br><strong style="color:var(--text)">الكمية الصح:</strong> '+c.oil_with_filter+' لتر مع تغيير الفلتر، أو '+c.oil_without_filter+' لتر بدون فلتر. لا تزيد ولا تنقص.'+
+    '<br><br><strong style="color:var(--text)">الشهادة المطلوبة:</strong> '+c.specifications.map(s=>'<span style="color:var(--accent)">'+s+'</span> ('+( STD_MEANING[s]||s)+')').join(' و ')+'.';
 
-  /* إعادة تعيين حقول VIN */
-  document.getElementById('vin-confirm').value='';
-  document.getElementById('vin-confirm-thanks').style.display='none';
-
-  document.getElementById('result').style.display='block';
-  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'start'});
+  $('vin-confirm').value='';
+  $('vin-confirm-thanks').style.display='none';
+  $('result').style.display='block';
+  $('result').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
+/* ══ tabs ══════════════════════════════════════ */
 function switchTab(name,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById('page-'+name).classList.add('active');
+  $('page-'+name).classList.add('active');
   btn.classList.add('active');
 }
 
+/* ══ calculator ════════════════════════════════ */
 function calcOil(){
-  const last=parseFloat(document.getElementById('c-last').value);
-  const cur=parseFloat(document.getElementById('c-current').value);
-  const itv=parseFloat(document.getElementById('c-interval').value);
-  const daily=parseFloat(document.getElementById('c-daily').value)||0;
+  const last=parseFloat($('c-last').value);
+  const cur=parseFloat($('c-current').value);
+  const itv=parseFloat($('c-interval').value);
+  const daily=parseFloat($('c-daily').value)||0;
   if(!last||!cur||cur<last){alert('تأكد من الأرقام — العداد الحالي يجب أن يكون أكبر من آخر تغيير');return;}
-  const done=cur-last,rem=itv-done,pct=Math.min(100,Math.round(done/itv*100));
-  document.getElementById('calc-km').textContent=Math.max(0,rem).toLocaleString('ar-SA');
-  document.getElementById('calc-pct').textContent=pct+'% من الفترة منتهية';
-  const fill=document.getElementById('calc-fill');
+  const done=cur-last, rem=itv-done, pct=Math.min(100,Math.round(done/itv*100));
+  $('calc-km').textContent=Math.max(0,rem).toLocaleString('ar-SA');
+  $('calc-pct').textContent=pct+'% من الفترة منتهية';
+  const fill=$('calc-fill');
   fill.style.width=pct+'%';
   fill.className='prog-fill '+(pct<70?'pf-green':pct<90?'pf-orange':'pf-red');
-  const badge=document.getElementById('calc-badge'),dtxt=document.getElementById('calc-days-txt');
-  if(rem<=0){badge.textContent='🔴 تجاوزت موعد التغيير';badge.className='calc-status s-danger';dtxt.textContent='تجاوزت الفترة بـ '+Math.abs(rem).toLocaleString('ar-SA')+' كم — غيّر الزيت الآن فوراً.';}
-  else if(pct>=80){badge.textContent='🟡 قرب موعد التغيير';badge.className='calc-status s-warn';const d=daily?Math.round(rem/daily):0;dtxt.textContent='متبقي تقريباً '+(d?d+' يوم':rem.toLocaleString('ar-SA')+' كم')+'.';}
-  else{badge.textContent='🟢 الزيت بخير';badge.className='calc-status s-good';const d=daily?Math.round(rem/daily):0;dtxt.textContent='تقدر تكمل '+(d?d+' يوم':rem.toLocaleString('ar-SA')+' كم')+' إضافياً.';}
-  document.getElementById('calc-result').style.display='block';
+  const badge=$('calc-badge'), dtxt=$('calc-days-txt');
+  if(rem<=0){
+    badge.textContent='🔴 تجاوزت موعد التغيير';badge.className='calc-status s-danger';
+    dtxt.textContent='تجاوزت الفترة بـ '+Math.abs(rem).toLocaleString('ar-SA')+' كم — غيّر الزيت الآن فوراً.';
+  }else if(pct>=80){
+    badge.textContent='🟡 قرب موعد التغيير';badge.className='calc-status s-warn';
+    const d=daily?Math.round(rem/daily):0;
+    dtxt.textContent='متبقي تقريباً '+(d?d+' يوم':rem.toLocaleString('ar-SA')+' كم')+'.';
+  }else{
+    badge.textContent='🟢 الزيت بخير';badge.className='calc-status s-good';
+    const d=daily?Math.round(rem/daily):0;
+    dtxt.textContent='تقدر تكمل '+(d?d+' يوم':rem.toLocaleString('ar-SA')+' كم')+' إضافياً.';
+  }
+  $('calc-result').style.display='block';
 }
 
+/* ══ VIN ═══════════════════════════════════════ */
 function submitVin(){
-  const vin=(document.getElementById('vin-input').value||'').trim().toUpperCase();
-  if(vin.length!==17){alert('رقم الهيكل لازم يكون 17 رمزاً بالضبط');return;}
-  document.getElementById('vin-input').value=vin;
-  document.getElementById('vin-thanks').style.display='block';
+  const v=($('vin-input').value||'').trim().toUpperCase();
+  if(v.length!==17){alert('رقم الهيكل لازم يكون 17 رمزاً بالضبط');return;}
+  $('vin-input').value=v;
+  $('vin-thanks').style.display='block';
+  console.log('VIN (not found):', v);
 }
-}
+
 function submitVinConfirm(){
-  const vin=(document.getElementById('vin-confirm').value||'').trim().toUpperCase();
-  if(vin.length!==17){alert('رقم الهيكل لازم يكون 17 رمزاً بالضبط');return;}
-  document.getElementById('vin-confirm').value=vin;
-  document.getElementById('vin-confirm-thanks').style.display='block';
+  const v=($('vin-confirm').value||'').trim().toUpperCase();
+  if(v.length!==17){alert('رقم الهيكل لازم يكون 17 رمزاً بالضبط');return;}
+  $('vin-confirm').value=v;
+  $('vin-confirm-thanks').style.display='block';
+  console.log('VIN confirm:', v);
 }
-}
+
+/* ══ email ═════════════════════════════════════ */
 function saveEmail(){
-  const v=document.getElementById('email-input').value.trim();
+  const v=$('email-input').value.trim();
   if(!v||!v.includes('@')){alert('أدخل بريداً إلكترونياً صحيحاً');return;}
-  document.getElementById('email-thanks').style.display='block';
-  document.getElementById('email-input').value='';
-  console.log('Email captured:',v);
+  $('email-thanks').style.display='block';
+  $('email-input').value='';
+  console.log('Email:', v);
 }
 </script>
-
-<!-- تنويه -->
-<div style="max-width:800px;margin:0 auto;padding:0 20px 44px;text-align:center;">
-  <div style="border-top:1px solid rgba(255,255,255,.05);padding-top:20px;">
-    <p style="font-size:11px;color:var(--text3);line-height:1.9;max-width:640px;margin:0 auto;">
-      <strong style="color:rgba(255,255,255,.3);">تنويه</strong><br>
-      هذه المنصة أداة تثقيفية تساعد ملّاك السيارات على فهم مواصفات زيوت المحركات بطريقة مبسطة. المعلومات المعروضة مبنية على بيانات عامة من أدلة الملاك الرسمية للشركات المصنّعة. قد تختلف المواصفات أو الكميات حسب سنة التصنيع أو الفئة أو السوق، لذلك يُوصى دائماً بالرجوع إلى دليل المالك الخاص بالمركبة للتأكد من المواصفات الدقيقة. تُقدَّم هذه المعلومات لأغراض التثقيف والتوضيح، ويظل المستخدم مسؤولاً عن التأكد من المواصفات المناسبة لسيارته قبل استخدامها.
-    </p>
-  </div>
-</div>
-
 </body>
 </html>
